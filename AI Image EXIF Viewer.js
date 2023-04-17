@@ -6,7 +6,7 @@
 // @match       https://arca.live/b/hypernetworks*
 // @match       https://arca.live/b/aiartreal*
 // @match       https://arca.live/b/aireal*
-// @version     1.9.5
+// @version     1.9.6-alpha.1
 // @author      nyqui
 // @require     https://greasyfork.org/scripts/452821-upng-js/code/UPNGjs.js?version=1103227
 // @require     https://cdn.jsdelivr.net/npm/casestry-exif-library@2.0.3/dist/exif-library.min.js
@@ -24,6 +24,13 @@
 // @description AI 이미지 메타데이터 보기
 // @license MIT
 // ==/UserScript==
+
+
+//versions to be displayed, pulled from script information defined above
+const scriptVersion = GM_info.script.version;
+const scriptGithubURL = GM_info.script.namespace;
+//this URL must be changed manually to be linked properly
+const scriptGreasyforkURL = "https://greasyfork.org/scripts/464214";
 
 (async function () {
   "use strict";
@@ -149,6 +156,13 @@
 
   span.md-civitai {
     content: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAllBMVEVHcEwORtARe/UMPdYPY+gOUuAKKc0RdvENT94LKc0LJMcLMM8LMc8SgPUSffIRePERcu4MN9EQbewQauoLKswLKswUIo0PZ+gWDmT///8LLtMPLKwQcvESA00LF4UiGWgKB2wNSuAMNM8LOtgPRb2XlLxDQY7Fw9kOW+cMO9NBNHG7utXR0OLv7vTc2+fe3utNSIs7N4PzUc8zAAAAFnRSTlMABvvJy9Kz18fsI9hVphtuSzKwKn11Da4jUwAAALdJREFUeNpNz8eWwjAMBVDZCQk9VMndTiGFPv//c3NimIG3ku5CRw8gZr1areETVuSc84L97ZvccCJu8k1c9ztjqHGuIWN2ewBIiRoX2ja4hiiNoAOepDxh0JQygLRHcZWXi3x47CcMYNqjv3Uh/LTiDeUIQrRPgeUbxFV2nbx7FyEp0frxqLdYJiMMgxb2fLZCD/UI26yqK7TWVXWVbOOvy4VSWiu1WP6XO86Umh3YV995ls1f0y8RAhFlMPQmQwAAAABJRU5ErkJggg==");
+  }
+
+  .version {
+    margin: 0;
+    text-align: right;
+    font-size: .5em;
+    font-style: italic;
   }
   `;
 
@@ -576,6 +590,7 @@
         </div>
         <div class="md-show-more">더 보기</div>
       </div>
+      <div class="version">v${scriptVersion}  -  <a href="${scriptGreasyforkURL}" target="_blank">Greasy Fork</a>  -  <a href="${scriptGithubURL}" target="_blank">GitHub</a></div>
       </div>
       `,
       width: "50em",
@@ -607,8 +622,11 @@
       title: "메타데이터 없음!",
       text: "찾아볼까요?",
       footer: `
-      <div class="md-info">
-        <a href="${url}" target="_blank">Image Open</a>
+      <div style="width: 100%;">
+        <div class="md-info" style="text-align: center;">
+          <a href="${url}" target="_blank">Image Open</a>
+        </div>
+        <div class="version">v${scriptVersion}  -  <a href="${scriptGreasyforkURL}" target="_blank">Greasy Fork</a>  -  <a href="${scriptGithubURL}" target="_blank">GitHub</a></div>
       </div>
       `,
       showCancelButton: true,
