@@ -892,8 +892,8 @@ const scriptGreasyforkURL = "https://greasyfork.org/scripts/464214";
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
   const isPixiv = hostname === "www.pixiv.net";
   const isArca = hostname === "arca.live";
-  const isArcaViwer = /(arca.live)(\/)(b\/.*)(\/)(\d*)/.test(href);
-  const isArcaWrite = /(arca.live\/b\/.*\/\write)/.test(href);
+  const isArcaViewer = /(arca.live)(\/)(b\/.*)(\/)(\d*)/.test(href);
+  const isArcaEditor = /(arca.live\/b\/.*\/)(edit|write)/.test(href);
   const useTampermonkey = GM_xmlhttpRequest?.RESPONSE_TYPE_STREAM && true;
   const isPixivDragUpload = pathname === "/illustration/create" || pathname === "/upload.php";
 
@@ -944,7 +944,7 @@ const scriptGreasyforkURL = "https://greasyfork.org/scripts/464214";
     });
   }
 
-  if (isArcaViwer) {
+  if (isArcaViewer) {
     document.arrive('a[href$="type=orig"] > img', { existing: true }, function () {
       if (this.classList.contains("channel-icon")) return;
 
@@ -960,13 +960,13 @@ const scriptGreasyforkURL = "https://greasyfork.org/scripts/464214";
     });
   }
 
-  if (isArcaWrite) {
+  if (isArcaEditor) {
     document.arrive(".images-multi-upload", { onceOnly: true }, () => {
       document.getElementById("saveExif").checked = true;
     });
   }
 
-  !isMobile && !isPixivDragUpload && !isArcaWrite && new DropZone();
+  !isMobile && !isPixivDragUpload && !isArcaEditor && new DropZone();
   GM_addStyle(modalCSS);
   new ClipboardJS(".md-copy");
   registerMenu();
