@@ -1,5 +1,4 @@
 # AI-Image-EXIF-Viewer
-
 https://greasyfork.org/ko/scripts/464214
 
 ## Version changes
@@ -15,7 +14,3 @@ https://greasyfork.org/ko/scripts/464214
 ## Original script 
 by shounksu:  
  https://greasyfork.org/ko/scripts/452822
-
-
-
-
