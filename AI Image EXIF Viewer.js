@@ -635,6 +635,7 @@ const scriptGreasyforkURL = "https://greasyfork.org/scripts/464214";
       denyButtonText: "WD 1.4 Tagger",
       cancelButtonText: "아니오",
       showLoaderOnConfirm: true,
+      showLoaderOnDeny: true,
       denyButtonColor: "#ff9d0b",
       backdrop: true,
       preConfirm: async () => {
