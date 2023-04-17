@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name        AI 이미지 EXIF 뷰어 kai
+// @name        AI 이미지 EXIF 뷰어
 // @namespace   https://github.com/nyqui/AI-Image-EXIF-Viewer
 // @match       https://www.pixiv.net/*
 // @match       https://arca.live/b/aiart*
