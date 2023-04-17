@@ -6,6 +6,7 @@ https://greasyfork.org/ko/scripts/464214
 ### 1.9.6 20??-??-?? ??:??
 
  1. (-alpha.1) "메타데이터 요약" 창과 "메타데이터 없음" 창에 버전, Greasy Fork 링크, GitHub 링크 추가 (엔드유저의 버전 확인 용이성 확보) 
+ 1. (-alpha.1) WD 1.4 Tagger 로딩시에도 DeepDanbooru와 같게 loader(바람개비) 나오도록 수정
  
 
 ### 1.9.5 (initial release) 2023-04-17 17:46
