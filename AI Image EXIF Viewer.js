@@ -19,8 +19,8 @@
 // @grant       GM_registerMenuCommand
 // @grant       GM_setValue
 // @grant       GM_getValue
-// @grant 	    GM_addStyle
-// @grant 	    GM_download
+// @grant       GM_addStyle
+// @grant       GM_download
 
 // @description AI 이미지 메타데이터 보기
 // @license MIT
