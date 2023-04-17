@@ -33,18 +33,15 @@
   .swal2-popup {
     font-size: 15px;
   }
-
   .swal2-actions {
     margin: .4em auto 0;
   }
-
   .swal2-footer{
     margin: 1em 1.6em .3em;
     padding: 1em 0 0;
     overflow: auto;
     font-size: 1.125em;
   }
-
   #dropzone {
     z-index: 100000000;
     display: none;
@@ -54,29 +51,29 @@
     left: 0;
     top: 0;
   }
-  
+
   .md-grid {
     display: grid;
     grid-template-rows: repeat(3, auto);
     text-align: left;
   }
-  
+
   .md-grid-item {
     border-bottom: 1px solid #b3b3b3;
     padding: .6em;
   }
-  
+
   .md-grid-item:last-child {
     border-bottom: 0px;
   }
-  
+
   .md-nested-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(4, auto);
     gap: .5em;
   }
-  
+
   .md-title {
     line-height: 1em;
     font-weight: bold;
@@ -85,20 +82,20 @@
     display: flex;
     color: #1A1A1A;
   }
-  
+
   .md-info {
     line-height: 1.5em;
     font-size: .8em;
     word-break: break-word;
     color: #444444;
   }
-  
+
   .md-hidden {
     overflow: hidden;
     position: relative;
     max-height: 5em;
   }
-  
+
   .md-hidden:after {
     content: "";
     position: absolute;
@@ -108,36 +105,33 @@
     height: 2em;
     background: linear-gradient(to bottom, rgba(255, 255, 255, 0.4) 0%, white 100%);
   }
-
   .md-info > a{
     text-decoration: none;
   }
-
   .md-info > a:hover{
-    text-decoration: underline !important; 
+    text-decoration: underline !important;
   }
-
   pre.md-show-and-hide{
     font-family: monospace;
     margin: 0px;
     white-space: pre-line;
   }
-  
+
   .md-visible {
     height: auto;
     overflow: auto;
   }
-  
+
   .md-model {
     grid-column-start: 1;
     grid-column-end: 3;
   }
-  
+
   .md-show-more {
     text-align: center;
     cursor: pointer;
   }
-  
+
   #md-tags {
     width: 100%;
     height: 20em;
@@ -145,16 +139,15 @@
     text-align: left;
     font-size: 0.9em;
   }
-
   span.md-button {
     margin-left: .15em;
     cursor: pointer;
   }
-  
+
   span.md-copy {
     content: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Crect width='16' height='16' stroke='none' fill='%23000000' opacity='0'/%3E%3Cg transform='matrix(0.6 0 0 0.6 8 8)' %3E%3Cpath style='stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1;' transform=' translate(-12, -12)' d='M 4 2 C 2.895 2 2 2.895 2 4 L 2 18 L 4 18 L 4 4 L 18 4 L 18 2 L 4 2 z M 8 6 C 6.895 6 6 6.895 6 8 L 6 20 C 6 21.105 6.895 22 8 22 L 20 22 C 21.105 22 22 21.105 22 20 L 22 8 C 22 6.895 21.105 6 20 6 L 8 6 z M 8 8 L 20 8 L 20 20 L 8 20 L 8 8 z' stroke-linecap='round' /%3E%3C/g%3E%3C/svg%3E");
   }
-  
+
   span.md-civitai {
     content: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAllBMVEVHcEwORtARe/UMPdYPY+gOUuAKKc0RdvENT94LKc0LJMcLMM8LMc8SgPUSffIRePERcu4MN9EQbewQauoLKswLKswUIo0PZ+gWDmT///8LLtMPLKwQcvESA00LF4UiGWgKB2wNSuAMNM8LOtgPRb2XlLxDQY7Fw9kOW+cMO9NBNHG7utXR0OLv7vTc2+fe3utNSIs7N4PzUc8zAAAAFnRSTlMABvvJy9Kz18fsI9hVphtuSzKwKn11Da4jUwAAALdJREFUeNpNz8eWwjAMBVDZCQk9VMndTiGFPv//c3NimIG3ku5CRw8gZr1areETVuSc84L97ZvccCJu8k1c9ztjqHGuIWN2ewBIiRoX2ja4hiiNoAOepDxh0JQygLRHcZWXi3x47CcMYNqjv3Uh/LTiDeUIQrRPgeUbxFV2nbx7FyEp0frxqLdYJiMMgxb2fLZCD/UI26yqK7TWVXWVbOOvy4VSWiu1WP6XO86Umh3YV995ls1f0y8RAhFlMPQmQwAAAABJRU5ErkJggg==");
   }
@@ -534,22 +527,17 @@
             <div class="md-info" id="size">${metadata["Size"] ?? "정보 없음"}</div>
           </div>
           <div>
-            <div class="md-title">CFG scale <span class="md-copy md-button" data-clipboard-target="#cfg-scale"></span>
-            </div>
+            <div class="md-title">CFG scale <span class="md-copy md-button" data-clipboard-target="#cfg-scale"></span></div>
             <div class="md-info" id="cfg-scale">${metadata["CFG scale"] ?? "정보 없음"}</div>
           </div>
           <div>
-            <div class="md-title">Image</div>
-            <div class="md-info">
-              <a href="${url}" target="_blank">Open</a> |
-              <a id="md-download">Save</a>
-            </div>
+            <div class="md-title">Denoising strength <span class="md-copy md-button" data-clipboard-target="#denoising-strength"></span></div>
+            <div class="md-info" id="denoising-strength">${metadata["Denoising strength"] ?? "정보 없음"}</div>
           </div>
           <div class="md-model">
             <div class="md-title">Model
               <span class="md-copy md-button" data-clipboard-target="#model"></span>
-              <a href='https://civitai.com/?query=${metadata["Model hash"]}' target='_blank'><span
-                  class="md-civitai md-button"></span></a>
+              <a href='https://civitai.com/?query=${metadata["Model hash"]}' target='_blank'><span class="md-civitai md-button"></span></a>
             </div>
             <div class="md-info" id="model">${
               metadata["Model"]
@@ -560,6 +548,18 @@
           <div>
             <div class="md-title">Infer...</div>
             <div class="md-info">${inferList.join(", ")}</div>
+          </div>
+        </div>
+      </div>
+      <div class="md-grid-item">
+        <div class="md-nested-grid">
+          <div></div>
+          <div></div>
+          <div>
+            <div class="md-title">Image</div>
+            <div class="md-info">
+              <a href="${url}" target="_blank">Open</a> | <a id="md-download">Save</a>
+            </div>
           </div>
         </div>
       </div>
@@ -690,7 +690,7 @@
       Swal.fire({
         confirmButtonText: "닫기",
         html: /*html*/ `
-          <div class="md-title">Output 
+          <div class="md-title">Output
             <span class="md-copy md-button" data-clipboard-target="#md-tags"></span>
           </div>
           <div class="md-info" id="md-tags">${tags}</div>
