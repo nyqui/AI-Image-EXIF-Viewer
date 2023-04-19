@@ -6,7 +6,7 @@
 // @match       https://arca.live/b/hypernetworks*
 // @match       https://arca.live/b/aiartreal*
 // @match       https://arca.live/b/aireal*
-// @version     1.9.6
+// @version     1.9.7-alpha.1
 // @author      nyqui
 // @require     https://greasyfork.org/scripts/452821-upng-js/code/UPNGjs.js?version=1103227
 // @require     https://cdn.jsdelivr.net/npm/casestry-exif-library@2.0.3/dist/exif-library.min.js
@@ -446,6 +446,9 @@ const scriptGreasyforkURL = "https://greasyfork.org/scripts/464214";
       metadata?.prompt?.includes("lora:") ||
       metadata?.negativePrompt?.includes("lora:")) &&
       inferList.push("LoRa");
+    (metadata?.prompt?.includes("lyco:") ||
+      metadata?.negativePrompt?.includes("lyco:")) &&
+      inferList.push("LyCORIS");
     (metadata?.["Hypernet"] ||
       metadata?.prompt?.includes("hypernet:") ||
       metadata?.negativePrompt?.includes("hypernet:")) &&
@@ -564,19 +567,6 @@ const scriptGreasyforkURL = "https://greasyfork.org/scripts/464214";
           </div>
         </div>
       </div>
-      <div class="md-grid-item">
-        <div class="md-nested-grid">
-          <div></div>
-          <div></div>
-          <div>
-            <div class="md-title">Image</div>
-            <div class="md-info">
-              <a href="${url}" target="_blank">Open</a> | <a id="md-download">Save</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
       `,
       footer: /*html*/ `
       <div class="md-grid-item">
@@ -594,9 +584,24 @@ const scriptGreasyforkURL = "https://greasyfork.org/scripts/464214";
       </div>
       `,
       width: "50em",
-      confirmButtonText: "닫기",
+      showDenyButton: true,
+      showCancelButton: true,
+      confirmButtonColor: "#5cc964",
+      denyButtonColor: "#ff9d0b",
+      cancelButtonColor: "#655cc9",
+      confirmButtonText: "이미지 열기",
+      denyButtonText: "이미지 저장",
+      cancelButtonText: "닫기"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.open(url, '_blank');
+      } else if (result.isDenied) {
+        GM_download(url, getFileName(url));
+      }
     });
     showAndHide(".md-show-and-hide");
+
+    //md-download deprecated 1.9.7-alpha.1
     document.querySelector("#md-download").addEventListener("click", () => {
       GM_download(url, getFileName(url));
     });
