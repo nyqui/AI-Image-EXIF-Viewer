@@ -3,7 +3,7 @@ https://greasyfork.org/ko/scripts/464214
 
 ## Version changes
 
-### 1.9.7 2023-04-20 02:44
+### 1.10.0 2023-04-20 02:49
  
  1. infer에 LyCORIS 인식 추가
  1. "메타데이터 요약" 창에서 "이미지 열기", "이미지 저장" 기능 버튼화
