@@ -6,7 +6,7 @@
 // @match       https://arca.live/b/hypernetworks*
 // @match       https://arca.live/b/aiartreal*
 // @match       https://arca.live/b/aireal*
-// @version     1.10.0
+// @version     1.10.1
 // @author      nyqui
 // @require     https://greasyfork.org/scripts/452821-upng-js/code/UPNGjs.js?version=1103227
 // @require     https://cdn.jsdelivr.net/npm/casestry-exif-library@2.0.3/dist/exif-library.min.js
@@ -422,6 +422,8 @@ const scriptGreasyforkURL = "https://greasyfork.org/scripts/464214";
       console.log(error);
       Swal.fire({
         icon: "error",
+        confirmButtonColor: "#b41b29",
+        confirmButtonText: "닫기",
         title: "분석 오류",
         html: `
         ${error}<br>
@@ -468,6 +470,7 @@ const scriptGreasyforkURL = "https://greasyfork.org/scripts/464214";
     metadata?.["1 DINO "] && inferList.push("DINO");
     metadata?.["LLuL Enabled"] && inferList.push("LLuL");
     metadata?.["Cutoff enabled"] && inferList.push("Cutoff");
+    metadata?.["Tiled Diffusion"] && inferList.push("Tiled Diffusion");
 
     return inferList;
   }
@@ -588,7 +591,7 @@ const scriptGreasyforkURL = "https://greasyfork.org/scripts/464214";
       showCancelButton: true,
       confirmButtonColor: "#5cc964",
       denyButtonColor: "#ff9d0b",
-      cancelButtonColor: "#655cc9",
+      cancelButtonColor: "#b41b29",
       confirmButtonText: "이미지 열기",
       denyButtonText: "이미지 저장",
       cancelButtonText: "닫기"
@@ -615,106 +618,107 @@ const scriptGreasyforkURL = "https://greasyfork.org/scripts/464214";
       }
     }
 
-    if (url === undefined) url = "/";
-
-    Swal.fire({
-      icon: "error",
-      title: "메타데이터 없음!",
-      text: "찾아볼까요?",
-      footer: `
-      <div style="width: 100%;">
-        <div class="md-info" style="text-align: center;">
-          <a href="${url}" target="_blank">Image Open</a>
-        </div>
-        <div class="version">v${scriptVersion}  -  <a href="${scriptGreasyforkURL}" target="_blank">Greasy Fork</a>  -  <a href="${scriptGithubURL}" target="_blank">GitHub</a></div>
-      </div>
-      `,
-      showCancelButton: true,
-      showDenyButton: true,
-      confirmButtonText: "DeepDanbooru",
-      denyButtonText: "WD 1.4 Tagger",
-      cancelButtonText: "아니오",
-      showLoaderOnConfirm: true,
-      showLoaderOnDeny: true,
-      denyButtonColor: "#ff9d0b",
-      backdrop: true,
-      preConfirm: async () => {
-        if (url === "/") {
-          Swal.fire({
-            icon: "error",
-            html: `
-            드래그 앤 드롭으로 분석한 파일은 사용 할 수 없습니다.`,
-          });
-          return new Promise(reject);
-        }
-        let formData = new FormData();
-        formData.append('url', url);
-        formData.append('min_score', '0.4');
-
-        return GM_fetch("https://deepdanbooru.donmai.us/evaluate", {
-          method: "POST",
-          body: formData,
-        })
-          .then((res) => {
-            if (!res.status === 200) {
-              Swal.showValidationMessage(`https://deepdanbooru.donmai.us 접속되는지 확인!`);
-            }
-            return res.json();
-          })
-          .catch((error) => {
-            console.log(error);
-            Swal.showValidationMessage(`https://deepdanbooru.donmai.us 접속되는지 확인!`);
-          });
-      },
-      preDeny: async () => {
-        if (url === "/") {
-          Swal.fire({
-            icon: "error",
-            html: `
-            드래그 앤드 드롭으로 분석한 파일은 사용할 수 없습니다.`,
-          });
-          return new Promise(reject);
-        }
-        const res = await GM_fetch(getOptimizedImageURL(url), {
-          headers: { Referer: `${location.protocol}//${location.hostname}` },
-        });
-        const blob = await res.blob();
-        const optimizedBase64 = await blobToBase64(blob);
-
-        return fetch("https://smilingwolf-wd-v1-4-tags.hf.space/run/predict", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            data: [optimizedBase64, "SwinV2", 0.35, 0.85],
-          }),
-        })
-          .then((res) => res.json())
-          .catch((error) => {
-            Swal.showValidationMessage(error);
-          });
-      },
-      allowOutsideClick: () => !Swal.isLoading(),
-    }).then((result) => {
-      if (result.isDismissed) return;
-      let tags;
-      if (result.isConfirmed) {
-        tags = result.value.map((el) => el[0]).join(", ");
-      } else if (result.isDenied) {
-        tags = result.value.data[3]?.label
-          ? `${result.value.data[3]?.label}, ${result.value.data[0]}`
-          : result.value.data[0];
-      }
-
+    // 드래그 & 드롭 파일
+    if (url === undefined) {
       Swal.fire({
+        icon: "error",
+        title: "메타데이터 없음!",
+        html: "드래그 앤 드롭으로 분석한 파일은<br>태그 찾기를 지원하지 않습니다.",
+        footer: `
+        <div style="width: 100%;">
+          <div class="version">v${scriptVersion}  -  <a href="${scriptGreasyforkURL}" target="_blank">Greasy Fork</a>  -  <a href="${scriptGithubURL}" target="_blank">GitHub</a></div>
+        </div>
+        `,
+        confirmButtonColor: "#b41b29",
         confirmButtonText: "닫기",
-        html: /*html*/ `
-          <div class="md-title">Output
-            <span class="md-copy md-button" data-clipboard-target="#md-tags"></span>
-          </div>
-          <div class="md-info" id="md-tags">${tags}</div>
-          `,
       });
-    });
+    } else { // 웹페이지에서 클릭한 파일
+      Swal.fire({
+        icon: "error",
+        title: "메타데이터 없음!",
+        text: "찾아볼까요?",
+        footer: `
+        <div style="width: 100%;">
+          <div class="md-info" style="text-align: center;">
+            <a href="${url}" target="_blank">Image Open</a>
+          </div>
+          <div class="version">v${scriptVersion}  -  <a href="${scriptGreasyforkURL}" target="_blank">Greasy Fork</a>  -  <a href="${scriptGithubURL}" target="_blank">GitHub</a></div>
+        </div>
+        `,
+        showCancelButton: true,
+        showDenyButton: true,
+        confirmButtonText: "DeepDanbooru",
+        denyButtonText: "WD 1.4 Tagger",
+        cancelButtonText: "아니오",
+        showLoaderOnConfirm: true,
+        showLoaderOnDeny: true,
+        confirmButtonColor: "#5cc964",
+        denyButtonColor: "#ff9d0b",
+        cancelButtonColor: "#b41b29",
+        backdrop: true,
+        preConfirm: async () => {
+          let formData = new FormData();
+          formData.append('url', url);
+          formData.append('min_score', '0.4');
+
+          return GM_fetch("https://deepdanbooru.donmai.us/evaluate", {
+            method: "POST",
+            body: formData,
+          })
+            .then((res) => {
+              if (!res.status === 200) {
+                Swal.showValidationMessage(`https://deepdanbooru.donmai.us 접속되는지 확인!`);
+              }
+              return res.json();
+            })
+            .catch((error) => {
+              console.log(error);
+              Swal.showValidationMessage(`https://deepdanbooru.donmai.us 접속되는지 확인!`);
+            });
+        },
+        preDeny: async () => {
+          const res = await GM_fetch(getOptimizedImageURL(url), {
+            headers: { Referer: `${location.protocol}//${location.hostname}` },
+          });
+          const blob = await res.blob();
+          const optimizedBase64 = await blobToBase64(blob);
+
+          return fetch("https://smilingwolf-wd-v1-4-tags.hf.space/run/predict", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              data: [optimizedBase64, "SwinV2", 0.35, 0.85],
+            }),
+          })
+            .then((res) => res.json())
+            .catch((error) => {
+              Swal.showValidationMessage(error);
+            });
+        },
+        allowOutsideClick: () => !Swal.isLoading(),
+      }).then((result) => {
+        if (result.isDismissed) return;
+        let tags;
+        if (result.isConfirmed) {
+          tags = result.value.map((el) => el[0]).join(", ");
+        } else if (result.isDenied) {
+          tags = result.value.data[3]?.label
+            ? `${result.value.data[3]?.label}, ${result.value.data[0]}`
+            : result.value.data[0];
+        }
+
+        Swal.fire({
+        confirmButtonColor: "#b41b29",
+        confirmButtonText: "닫기",
+          html: /*html*/ `
+            <div class="md-title">Output
+              <span class="md-copy md-button" data-clipboard-target="#md-tags"></span>
+            </div>
+            <div class="md-info" id="md-tags">${tags}</div>
+            `,
+        });
+      });
+    };
   }
 
   function fileToBlob(file) {
