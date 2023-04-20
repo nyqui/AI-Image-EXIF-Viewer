@@ -6,7 +6,7 @@
 // @match       https://arca.live/b/hypernetworks*
 // @match       https://arca.live/b/aiartreal*
 // @match       https://arca.live/b/aireal*
-// @version     1.10.1
+// @version     1.10.2-alpha.3
 // @author      nyqui
 // @require     https://greasyfork.org/scripts/452821-upng-js/code/UPNGjs.js?version=1103227
 // @require     https://cdn.jsdelivr.net/npm/casestry-exif-library@2.0.3/dist/exif-library.min.js
@@ -25,12 +25,18 @@
 // @license MIT
 // ==/UserScript==
 
-
-//versions to be displayed, pulled from script information defined above
-const scriptVersion = GM_info.script.version;
-const scriptGithubURL = GM_info.script.namespace;
 //this URL must be changed manually to be linked properly
 const scriptGreasyforkURL = "https://greasyfork.org/scripts/464214";
+//toast timer in ms
+const toastTimer = 3000;
+const colorOption1 = "#5cc964";
+const colorOption2 = "#ff9d0b";
+const colorClose = "#b41b29";
+
+
+const footerString = "<div class=\"version\">v" + GM_info.script.version
+  + "  -  <a href=\"" + scriptGreasyforkURL + "\" target=\"_blank\">Greasy Fork</a>  -  <a href=\""
+  + GM_info.script.namespace + "\" target=\"_blank\">GitHub</a></div>";
 
 (async function () {
   "use strict";
@@ -178,7 +184,7 @@ const scriptGreasyforkURL = "https://greasyfork.org/scripts/464214";
               toast: true,
               position: "bottom",
               showConfirmButton: false,
-              timer: 2000,
+              timer: `${toastTimer}`,
               icon: "error",
               title: `Pixiv 비활성화
                       창이 닫힌 후 새로고침 됩니다`,
@@ -193,7 +199,7 @@ const scriptGreasyforkURL = "https://greasyfork.org/scripts/464214";
               toast: true,
               position: "bottom",
               showConfirmButton: false,
-              timer: 2000,
+              timer: `${toastTimer}`,
               icon: "success",
               title: `Pixiv 활성화
                       창이 닫힌 후 새로고침 됩니다`,
@@ -422,7 +428,7 @@ const scriptGreasyforkURL = "https://greasyfork.org/scripts/464214";
       console.log(error);
       Swal.fire({
         icon: "error",
-        confirmButtonColor: "#b41b29",
+        confirmButtonColor: `${colorClose}`,
         confirmButtonText: "닫기",
         title: "분석 오류",
         html: `
@@ -583,15 +589,15 @@ const scriptGreasyforkURL = "https://greasyfork.org/scripts/464214";
         </div>
         <div class="md-show-more">더 보기</div>
       </div>
-      <div class="version">v${scriptVersion}  -  <a href="${scriptGreasyforkURL}" target="_blank">Greasy Fork</a>  -  <a href="${scriptGithubURL}" target="_blank">GitHub</a></div>
+      ${footerString}
       </div>
       `,
       width: "50em",
       showDenyButton: true,
       showCancelButton: true,
-      confirmButtonColor: "#5cc964",
-      denyButtonColor: "#ff9d0b",
-      cancelButtonColor: "#b41b29",
+      confirmButtonColor: `${colorOption1}`,
+      denyButtonColor: `${colorOption2}`,
+      cancelButtonColor: `${colorClose}`,
       confirmButtonText: "이미지 열기",
       denyButtonText: "이미지 저장",
       cancelButtonText: "닫기"
@@ -621,16 +627,19 @@ const scriptGreasyforkURL = "https://greasyfork.org/scripts/464214";
     // 드래그 & 드롭 파일
     if (url === undefined) {
       Swal.fire({
+        toast: true,
+        position: "top-end",
         icon: "error",
+        showConfirmButton: false,
+        timer: `${toastTimer}`,
+        timerProgressBar: true,
         title: "메타데이터 없음!",
         html: "드래그 앤 드롭으로 분석한 파일은<br>태그 찾기를 지원하지 않습니다.",
         footer: `
         <div style="width: 100%;">
-          <div class="version">v${scriptVersion}  -  <a href="${scriptGreasyforkURL}" target="_blank">Greasy Fork</a>  -  <a href="${scriptGithubURL}" target="_blank">GitHub</a></div>
+          ${footerString}
         </div>
         `,
-        confirmButtonColor: "#b41b29",
-        confirmButtonText: "닫기",
       });
     } else { // 웹페이지에서 클릭한 파일
       Swal.fire({
@@ -640,9 +649,9 @@ const scriptGreasyforkURL = "https://greasyfork.org/scripts/464214";
         footer: `
         <div style="width: 100%;">
           <div class="md-info" style="text-align: center;">
-            <a href="${url}" target="_blank">Image Open</a>
+            <a href="${url}" onclick="swal.close(); return true;">Image Open</a>
           </div>
-          <div class="version">v${scriptVersion}  -  <a href="${scriptGreasyforkURL}" target="_blank">Greasy Fork</a>  -  <a href="${scriptGithubURL}" target="_blank">GitHub</a></div>
+          ${footerString}
         </div>
         `,
         showCancelButton: true,
@@ -652,9 +661,9 @@ const scriptGreasyforkURL = "https://greasyfork.org/scripts/464214";
         cancelButtonText: "아니오",
         showLoaderOnConfirm: true,
         showLoaderOnDeny: true,
-        confirmButtonColor: "#5cc964",
-        denyButtonColor: "#ff9d0b",
-        cancelButtonColor: "#b41b29",
+        confirmButtonColor: `${colorOption1}`,
+        denyButtonColor: `${colorOption2}`,
+        cancelButtonColor: `${colorClose}`,
         backdrop: true,
         preConfirm: async () => {
           let formData = new FormData();
@@ -708,7 +717,7 @@ const scriptGreasyforkURL = "https://greasyfork.org/scripts/464214";
         }
 
         Swal.fire({
-        confirmButtonColor: "#b41b29",
+        confirmButtonColor: `${colorClose}`,
         confirmButtonText: "닫기",
           html: /*html*/ `
             <div class="md-title">Output
@@ -742,7 +751,7 @@ const scriptGreasyforkURL = "https://greasyfork.org/scripts/464214";
       toast: true,
       position: "top-end",
       showConfirmButton: false,
-      timer: 1000,
+      timer: `${toastTimer}`,
       timerProgressBar: true,
       icon: "error",
       title: "지원하지 않는 파일 형식입니다.",
