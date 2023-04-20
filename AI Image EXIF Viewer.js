@@ -6,7 +6,7 @@
 // @match       https://arca.live/b/hypernetworks*
 // @match       https://arca.live/b/aiartreal*
 // @match       https://arca.live/b/aireal*
-// @version     1.10.2-alpha.2
+// @version     1.10.2-alpha.3
 // @author      nyqui
 // @require     https://greasyfork.org/scripts/452821-upng-js/code/UPNGjs.js?version=1103227
 // @require     https://cdn.jsdelivr.net/npm/casestry-exif-library@2.0.3/dist/exif-library.min.js
@@ -33,7 +33,10 @@ const colorOption1 = "#5cc964";
 const colorOption2 = "#ff9d0b";
 const colorClose = "#b41b29";
 
-const footerString = "<div class=\"version\">v" + GM_info.script.version + "  -  <a href=\"" + scriptGreasyforkURL + "\" target=\"_blank\">Greasy Fork</a>  -  <a href=\"" + GM_info.script.namespace + "\" target=\"_blank\">GitHub</a></div>";
+
+const footerString = "<div class=\"version\">v" + GM_info.script.version
+  + "  -  <a href=\"" + scriptGreasyforkURL + "\" target=\"_blank\">Greasy Fork</a>  -  <a href=\""
+  + GM_info.script.namespace + "\" target=\"_blank\">GitHub</a></div>";
 
 (async function () {
   "use strict";
