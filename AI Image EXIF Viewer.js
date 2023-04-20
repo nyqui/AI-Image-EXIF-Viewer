@@ -6,7 +6,7 @@
 // @match       https://arca.live/b/hypernetworks*
 // @match       https://arca.live/b/aiartreal*
 // @match       https://arca.live/b/aireal*
-// @version     1.10.2-alpha.1
+// @version     1.10.2-alpha.2
 // @author      nyqui
 // @require     https://greasyfork.org/scripts/452821-upng-js/code/UPNGjs.js?version=1103227
 // @require     https://cdn.jsdelivr.net/npm/casestry-exif-library@2.0.3/dist/exif-library.min.js
@@ -29,7 +29,9 @@
 const scriptGreasyforkURL = "https://greasyfork.org/scripts/464214";
 //toast timer in ms
 const toastTimer = 3000;
-
+const colorOption1 = "#5cc964";
+const colorOption2 = "#ff9d0b";
+const colorClose = "#b41b29";
 
 const footerString = "<div class=\"version\">v" + GM_info.script.version + "  -  <a href=\"" + scriptGreasyforkURL + "\" target=\"_blank\">Greasy Fork</a>  -  <a href=\"" + GM_info.script.namespace + "\" target=\"_blank\">GitHub</a></div>";
 
@@ -423,7 +425,7 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version + "  - 
       console.log(error);
       Swal.fire({
         icon: "error",
-        confirmButtonColor: "#b41b29",
+        confirmButtonColor: `${colorClose}`,
         confirmButtonText: "닫기",
         title: "분석 오류",
         html: `
@@ -590,9 +592,9 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version + "  - 
       width: "50em",
       showDenyButton: true,
       showCancelButton: true,
-      confirmButtonColor: "#5cc964",
-      denyButtonColor: "#ff9d0b",
-      cancelButtonColor: "#b41b29",
+      confirmButtonColor: `${colorOption1}`,
+      denyButtonColor: `${colorOption2}`,
+      cancelButtonColor: `${colorClose}`,
       confirmButtonText: "이미지 열기",
       denyButtonText: "이미지 저장",
       cancelButtonText: "닫기"
@@ -644,7 +646,7 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version + "  - 
         footer: `
         <div style="width: 100%;">
           <div class="md-info" style="text-align: center;">
-            <a href="${url}" target="_blank">Image Open</a>
+            <a href="${url}" onclick="swal.close(); return true;">Image Open</a>
           </div>
           ${footerString}
         </div>
@@ -656,9 +658,9 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version + "  - 
         cancelButtonText: "아니오",
         showLoaderOnConfirm: true,
         showLoaderOnDeny: true,
-        confirmButtonColor: "#5cc964",
-        denyButtonColor: "#ff9d0b",
-        cancelButtonColor: "#b41b29",
+        confirmButtonColor: `${colorOption1}`,
+        denyButtonColor: `${colorOption2}`,
+        cancelButtonColor: `${colorClose}`,
         backdrop: true,
         preConfirm: async () => {
           let formData = new FormData();
@@ -712,7 +714,7 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version + "  - 
         }
 
         Swal.fire({
-        confirmButtonColor: "#b41b29",
+        confirmButtonColor: `${colorClose}`,
         confirmButtonText: "닫기",
           html: /*html*/ `
             <div class="md-title">Output
