@@ -1,6 +1,10 @@
 # AI-Image-EXIF-Viewer
 https://greasyfork.org/ko/scripts/464214
 
+## 이곳은 dev 브랜치입니다. 
+### TODO:
+ 1. 버튼 색깔 일관성 패치
+
 ## Version changes
 
 ### 1.10.0 2023-04-20 02:49
