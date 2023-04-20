@@ -3,16 +3,15 @@ https://greasyfork.org/ko/scripts/464214
 
 ## 이곳은 dev 브랜치입니다. 
 ### TODO:
- 1. 버튼 색깔 일관성 패치
+ 1. 메타데이터 없는 이미지 팝업에서 Image Open 하면 팝업도 동시에 닫히도록? onClick으론 안됨
+ 1. 드래그 + 드롭한, 메타데이터 없는 이미지도 분석이 어떻게 가능하지 않을까? deepdanbooru는 될 거로 보였었는데 며칠째 열리질 않음
 
 ## Version changes
 ### 1.10.1 2023-04-xx xx:xx
 
- 1. infer에 Tiled Diffusion 인식 추가
  1. 버튼 색깔 일관성 패치
  1. 드래그 + 드롭으로 분석한 파일에서 메타데이터를 찾지 못했을 때의 루틴 분리
- 1. 
- 
+ 1. infer에 Tiled Diffusion 인식 추가
 
 ### 1.10.0 2023-04-20 02:49
  
