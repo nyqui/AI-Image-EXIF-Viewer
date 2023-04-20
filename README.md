@@ -7,6 +7,7 @@ https://greasyfork.org/ko/scripts/464214
 ## TODO:
  1. 메타데이터 없는 이미지 팝업에서 Image Open 하면 팝업도 동시에 닫히도록?
  1. 드래그 + 드롭한, 메타데이터 없는 이미지도 분석이 어떻게 가능하지 않을까? deepdanbooru는 될 거로 보였었는데 며칠째 503 뜨면서 열리질 않아서 확인 못함
+ 1. Swal.mixin({ ...options })로 통일화하기 (버튼 디폴트값, 토스트 알림들 등등)
 --- 
 AI로 만든 이미지 파일을 클릭하면 이미지의 메타데이터를 읽어 생성에 관련된 정보가 있다면 이를 표시합니다.
 
@@ -21,6 +22,10 @@ AI Image EXIF Viewer for select channels in arca.live, and pixiv.
 Intended for Korean users - English locale is currently not planned.
 
 ## Version changes
+### 1.10.3 2023-xx-xx xx:xx
+
+ 1. 버튼이 두 개 이상 있을 시 "닫기" 버튼을 기본값으로 변경 (팝업이 떴을 때 엔터/스페이스 키로 바로 닫을 수 있음)
+
 ### 1.10.2 2023-04-21 07:09
 
  1. 토스트형 알림 지속시간 일괄적으로 변경 및 3초로 변경
