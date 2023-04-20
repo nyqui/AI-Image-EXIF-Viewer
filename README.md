@@ -1,13 +1,18 @@
 # AI-Image-EXIF-Viewer
 https://greasyfork.org/ko/scripts/464214
 
-## 이곳은 개발중인 장소입니다.
- 코드가 안정화되지 않았을 수 있으며, main에 merge 및 Greasy Fork로 release되기 전 언제던 변경될 수 있습니다.
- 
-## TODO:
- 1. 메타데이터 없는 이미지 팝업에서 Image Open 하면 팝업도 동시에 닫히도록?
- 1. 드래그 + 드롭한, 메타데이터 없는 이미지도 분석이 어떻게 가능하지 않을까? deepdanbooru는 될 거로 보였었는데 며칠째 503 뜨면서 열리질 않아서 확인 못함
- 
+AI로 만든 이미지 파일을 클릭하면 이미지의 메타데이터를 읽어 생성에 관련된 정보가 있다면 이를 표시합니다.
+
+관련 메타데이터가 없다면 외부 서비스와 연동해 이미지에 매칭되는 프롬프트를 도출할 수 있습니다.
+
+아카라이브 AI 그림/반실사/실사 채널, pixiv(로그인 필요) 에서 작동합니다.
+
+또한 컴퓨터에 이미 저장된 이미지를 해당 채널/사이트 창에 드래그 + 드롭하면 마찬가지로 메타데이터 읽기를 시도합니다.
+(이때 프롬프트 매칭은 현재로서는 지원하지 않습니다.)
+
+AI Image EXIF Viewer for select channels in arca.live, and pixiv.
+Intended for Korean users - English locale is currently not planned.
+
 ## Version changes
 ### 1.10.2 2023-04-21 07:09
 
