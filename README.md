@@ -1,6 +1,11 @@
 # AI-Image-EXIF-Viewer
 https://greasyfork.org/ko/scripts/464214
 
+## 이곳은 dev 브랜치입니다. 
+### TODO:
+ 1. 메타데이터 없는 이미지 팝업에서 Image Open 하면 팝업도 동시에 닫히도록? onClick으론 안됨
+ 1. 드래그 + 드롭한, 메타데이터 없는 이미지도 분석이 어떻게 가능하지 않을까? deepdanbooru는 될 거로 보였었는데 며칠째 열리질 않음
+
 ## Version changes
 ### 1.10.1 2023-04-21 04:13
 
