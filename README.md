@@ -6,6 +6,13 @@ https://greasyfork.org/ko/scripts/464214
  1. 버튼 색깔 일관성 패치
 
 ## Version changes
+### 1.10.1 2023-04-xx xx:xx
+
+ 1. infer에 Tiled Diffusion 인식 추가
+ 1. 버튼 색깔 일관성 패치
+ 1. 드래그 + 드롭으로 분석한 파일에서 메타데이터를 찾지 못했을 때의 루틴 분리
+ 1. 
+ 
 
 ### 1.10.0 2023-04-20 02:49
  
