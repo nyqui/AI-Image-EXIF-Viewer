@@ -6,7 +6,7 @@
 // @match       https://arca.live/b/hypernetworks*
 // @match       https://arca.live/b/aiartreal*
 // @match       https://arca.live/b/aireal*
-// @version     1.10.2
+// @version     1.11.0
 // @author      nyqui
 // @require     https://greasyfork.org/scripts/452821-upng-js/code/UPNGjs.js?version=1103227
 // @require     https://cdn.jsdelivr.net/npm/casestry-exif-library@2.0.3/dist/exif-library.min.js
@@ -595,6 +595,7 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version
       width: "50em",
       showDenyButton: true,
       showCancelButton: true,
+      focusCancel: true,
       confirmButtonColor: `${colorOption1}`,
       denyButtonColor: `${colorOption2}`,
       cancelButtonColor: `${colorClose}`,
@@ -656,33 +657,39 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version
         `,
         showCancelButton: true,
         showDenyButton: true,
-        confirmButtonText: "DeepDanbooru",
+        confirmButtonText: "Danbooru Autotagger",
         denyButtonText: "WD 1.4 Tagger",
         cancelButtonText: "아니오",
         showLoaderOnConfirm: true,
         showLoaderOnDeny: true,
+        focusCancel: true,
         confirmButtonColor: `${colorOption1}`,
         denyButtonColor: `${colorOption2}`,
         cancelButtonColor: `${colorClose}`,
         backdrop: true,
         preConfirm: async () => {
+          const res = await GM_fetch(getOptimizedImageURL(url), {
+            headers: { Referer: `${location.protocol}//${location.hostname}` },
+          });
+          const blob = await res.blob();
           let formData = new FormData();
-          formData.append('url', url);
-          formData.append('min_score', '0.4');
+          formData.append('threshold', '0.4');
+          formData.append('format', 'json');
+          formData.append('file', blob);
 
-          return GM_fetch("https://deepdanbooru.donmai.us/evaluate", {
+          return GM_fetch("https://autotagger.donmai.us/evaluate", {
             method: "POST",
             body: formData,
           })
             .then((res) => {
               if (!res.status === 200) {
-                Swal.showValidationMessage(`https://deepdanbooru.donmai.us 접속되는지 확인!`);
+                Swal.showValidationMessage(`https://autotagger.donmai.us 접속되는지 확인!`);
               }
               return res.json();
             })
             .catch((error) => {
               console.log(error);
-              Swal.showValidationMessage(`https://deepdanbooru.donmai.us 접속되는지 확인!`);
+              Swal.showValidationMessage(`https://autotagger.donmai.us 접속되는지 확인!`);
             });
         },
         preDeny: async () => {
@@ -709,7 +716,7 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version
         if (result.isDismissed) return;
         let tags;
         if (result.isConfirmed) {
-          tags = result.value.map((el) => el[0]).join(", ");
+          tags = Object.keys(result.value[0].tags).join(', ').replaceAll('_', ' ');
         } else if (result.isDenied) {
           tags = result.value.data[3]?.label
             ? `${result.value.data[3]?.label}, ${result.value.data[0]}`

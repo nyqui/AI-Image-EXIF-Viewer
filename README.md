@@ -14,6 +14,12 @@ AI Image EXIF Viewer for select channels in arca.live, and pixiv.
 Intended for Korean users - English locale is currently not planned.
 
 ## Version changes
+### 1.11.0 2023-04-21 17:25
+
+ 1. DeepDanbooru를 Danbooru Autotagger로 대체
+     - relevance/threshold는 종전처럼 0.4(40%)로 유지
+ 1. 버튼이 두 개 이상 있을 시 "닫기" 버튼을 기본값으로 변경 (팝업이 떴을 때 엔터/스페이스 키로 바로 닫을 수 있음)
+
 ### 1.10.2 2023-04-21 07:09
 
  1. 토스트형 알림 지속시간 일괄적으로 변경 및 3초로 변경
