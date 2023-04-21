@@ -6,7 +6,7 @@
 // @match       https://arca.live/b/hypernetworks*
 // @match       https://arca.live/b/aiartreal*
 // @match       https://arca.live/b/aireal*
-// @version     1.10.3-alpha.2
+// @version     1.11.0
 // @author      nyqui
 // @require     https://greasyfork.org/scripts/452821-upng-js/code/UPNGjs.js?version=1103227
 // @require     https://cdn.jsdelivr.net/npm/casestry-exif-library@2.0.3/dist/exif-library.min.js
@@ -657,7 +657,7 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version
         `,
         showCancelButton: true,
         showDenyButton: true,
-        confirmButtonText: "DeepDanbooru",
+        confirmButtonText: "Danbooru Autotagger",
         denyButtonText: "WD 1.4 Tagger",
         cancelButtonText: "아니오",
         showLoaderOnConfirm: true,
