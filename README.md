@@ -14,6 +14,10 @@ AI Image EXIF Viewer for select channels in arca.live, and pixiv.
 Intended for Korean users - English locale is currently not planned.
 
 ## Version changes
+### 1.11.1 2023-04-22 23:28
+
+ 1. 메타데이터 없는 이미지에서 Image Open시 새 탭/창에 열리지 않는 문제 수정 및 텍스트 "Open image..."로 변경
+
 ### 1.11.0 2023-04-21 17:25
 
  1. DeepDanbooru를 Danbooru Autotagger로 대체
