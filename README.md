@@ -7,8 +7,8 @@ https://greasyfork.org/ko/scripts/464214
 ## TODO:
  1. 메타데이터 없는 이미지 팝업에서 Image Open 하면 팝업도 동시에 닫히도록?
  1. 드래그 + 드롭한, 메타데이터 없는 이미지도 분석이 어떻게 가능하지 않을까? deepdanbooru는 될 거로 보였었는데 며칠째 503 뜨면서 열리질 않아서 확인 못함
- ~~1. deepdanbooru.donmai.us 말고 다른 데로 바꿀 수 있을까?~~ autotagger.donmai.us
- 1. Swal.mixin({ ...options })로 통일화하기 (버튼 디폴트값, 토스트 알림들 등등)
+ 2. ~~1. deepdanbooru.donmai.us 말고 다른 데로 바꿀 수 있을까?~~ autotagger.donmai.us
+ 3. Swal.mixin({ ...options })로 통일화하기 (버튼 디폴트값, 토스트 알림들 등등)
 --- 
 AI로 만든 이미지 파일을 클릭하면 이미지의 메타데이터를 읽어 생성에 관련된 정보가 있다면 이를 표시합니다.
 
