@@ -1,6 +1,15 @@
 # AI-Image-EXIF-Viewer
 https://greasyfork.org/ko/scripts/464214
 
+## ⚠️⚠️⚠️ 이곳은 개발중인 장소입니다. ⚠️⚠️⚠️
+ 코드가 안정화되지 않았을 수 있으며, main에 merge 및 Greasy Fork로 release되기 전 언제던 변경될 수 있습니다.
+ 
+## TODO:
+ 1. 메타데이터 없는 이미지 팝업에서 Image Open 하면 팝업도 동시에 닫히도록?
+ 1. 드래그 + 드롭한, 메타데이터 없는 이미지도 분석이 어떻게 가능하지 않을까? deepdanbooru는 될 거로 보였었는데 며칠째 503 뜨면서 열리질 않아서 확인 못함
+ ~~1. deepdanbooru.donmai.us 말고 다른 데로 바꿀 수 있을까?~~ autotagger.donmai.us
+ 1. Swal.mixin({ ...options })로 통일화하기 (버튼 디폴트값, 토스트 알림들 등등)
+--- 
 AI로 만든 이미지 파일을 클릭하면 이미지의 메타데이터를 읽어 생성에 관련된 정보가 있다면 이를 표시합니다.
 
 관련 메타데이터가 없다면 외부 서비스와 연동해 이미지에 매칭되는 프롬프트를 도출할 수 있습니다.
