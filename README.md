@@ -1,6 +1,5 @@
 # AI-Image-EXIF-Viewer
 https://greasyfork.org/ko/scripts/464214
-
 AI로 만든 이미지 파일을 클릭하면 이미지의 메타데이터를 읽어 생성에 관련된 정보가 있다면 이를 표시합니다.
 
 관련 메타데이터가 없다면 외부 서비스와 연동해 이미지에 매칭되는 프롬프트를 도출할 수 있습니다.
@@ -14,6 +13,13 @@ AI Image EXIF Viewer for select channels in arca.live, and pixiv.
 Intended for Korean users - English locale is currently not planned.
 
 ## Version changes
+### 1.12.0 2023-05-04 02:09
+
+ 1. 드래그 + 드롭으로 분석한 파일도 웹페이지에서 클릭한 파일과 마찬가지로 Danbooru Autotagger, WD 1.4 Tagger 사용 가능
+ 1. 드래그 + 드롭으로 분석시 표시되는 팝업 수정
+     - (EXIF 있을 시) "이미지 열기", "... 저장" 버튼 표시 안함
+     - (EXIF 없을 시) "Open image..." 표시 안함
+
 ### 1.11.1 2023-04-22 23:28
 
  1. 메타데이터 없는 이미지에서 Image Open시 새 탭/창에 열리지 않는 문제 수정 및 텍스트 "Open image..."로 변경
