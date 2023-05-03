@@ -6,7 +6,7 @@
 // @match       https://arca.live/b/hypernetworks*
 // @match       https://arca.live/b/aiartreal*
 // @match       https://arca.live/b/aireal*
-// @version     1.12.0-alpha.2
+// @version     1.12.0-alpha.3
 // @author      nyqui
 // @require     https://greasyfork.org/scripts/452821-upng-js/code/UPNGjs.js?version=1103227
 // @require     https://cdn.jsdelivr.net/npm/casestry-exif-library@2.0.3/dist/exif-library.min.js
@@ -603,6 +603,7 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version
       cancelButtonText: "닫기"
     })
 
+    // if image has URL, options are available to open in new tab or download
     if (url != null) {
       showMeta.fire().then((result) => {
         if (result.isConfirmed) {
@@ -611,7 +612,7 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version
           GM_download(url, getFileName(url));
         }
       });
-    } else {
+    } else { // if image has no URL, then it must have been dragged and dropped, hence no open in new tab or download options
       showMeta.fire({
         showDenyButton: false,
         showCancelButton: false,
@@ -625,6 +626,25 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version
   }
 
   function showTagExtractionModal(url, blob) {
+    let noMeta = Swal.mixin({
+      footer: `
+      <div style="width: 100%;">
+        <div class="md-info" style="text-align: center;">
+          <a href="${url}" target="_blank">Open image...</a>
+        </div>
+        ${footerString}
+      </div>
+      `
+    });
+    if (url == null) {
+      noMeta = Swal.mixin({
+        footer: `
+        <div style="width: 100%;">
+          ${footerString}
+        </div>
+        `
+      });
+    };
     function getOptimizedImageURL(url) {
       if (isArca) {
         return url.replace("ac.namu.la", "ac-o.namu.la").replace("&type=orig", "");
@@ -636,19 +656,10 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version
           .replace(`.${extension}`, "_master1200.jpg");
       }
     }
-
-      Swal.fire({
+      noMeta.fire({
         icon: "error",
         title: "메타데이터 없음!",
         text: "찾아볼까요?",
-        footer: `
-        <div style="width: 100%;">
-          <div class="md-info" style="text-align: center;">
-            <a href="${url}" target="_blank">Open image...</a>
-          </div>
-          ${footerString}
-        </div>
-        `,
         showCancelButton: true,
         showDenyButton: true,
         confirmButtonText: "Danbooru Autotagger",
@@ -914,7 +925,6 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version
   const useTampermonkey = GM_xmlhttpRequest?.RESPONSE_TYPE_STREAM && true;
   const isPixivDragUpload = pathname === "/illustration/create" || pathname === "/upload.php";
 
-  //TODO: 언젠가는 픽시브 비로그인 지원
   if (GM_getValue("usePixiv", false) && isPixiv) {
     function getOriginalUrl(url) {
       const extension = url.substring(url.lastIndexOf(".") + 1);
