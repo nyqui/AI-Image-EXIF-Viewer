@@ -7,7 +7,7 @@ AI로 만든 이미지 파일을 클릭하면 이미지의 메타데이터를 �
 아카라이브 AI 그림/반실사/실사 채널, pixiv(로그인 필요) 에서 작동합니다.
 
 또한 컴퓨터에 이미 저장된 이미지를 해당 채널/사이트 창에 드래그 + 드롭하면 마찬가지로 메타데이터 읽기를 시도합니다.
-(이때 프롬프트 매칭은 현재로서는 지원하지 않습니다.)
+(이때도 관련 메타데이터가 없을 시 프롬프트 매칭을 시도할 수 있습니다.)
 
 AI Image EXIF Viewer for select channels in arca.live, and pixiv.
 Intended for Korean users - English locale is currently not planned.
