@@ -6,7 +6,7 @@
 // @match       https://arca.live/b/hypernetworks*
 // @match       https://arca.live/b/aiartreal*
 // @match       https://arca.live/b/aireal*
-// @version     1.11.1
+// @version     1.12.0-alpha.1
 // @author      nyqui
 // @require     https://greasyfork.org/scripts/452821-upng-js/code/UPNGjs.js?version=1103227
 // @require     https://cdn.jsdelivr.net/npm/casestry-exif-library@2.0.3/dist/exif-library.min.js
@@ -251,7 +251,7 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version
         return;
       }
       const metadata = await extractImageMetadata(blob, type);
-      metadata ? showMetadataModal(metadata) : showTagExtractionModal();
+      metadata ? showMetadataModal(metadata) : showTagExtractionModal(null, blob);
     }
 
     setupEventListeners() {
@@ -612,7 +612,7 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version
     showAndHide(".md-show-and-hide");
   }
 
-  function showTagExtractionModal(url) {
+  function showTagExtractionModal(url, blob) {
     function getOptimizedImageURL(url) {
       if (isArca) {
         return url.replace("ac.namu.la", "ac-o.namu.la").replace("&type=orig", "");
@@ -626,23 +626,7 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version
     }
 
     // 드래그 & 드롭 파일
-    if (url === undefined) {
-      Swal.fire({
-        toast: true,
-        position: "top-end",
-        icon: "error",
-        showConfirmButton: false,
-        timer: `${toastTimer}`,
-        timerProgressBar: true,
-        title: "메타데이터 없음!",
-        html: "드래그 앤 드롭으로 분석한 파일은<br>태그 찾기를 지원하지 않습니다.",
-        footer: `
-        <div style="width: 100%;">
-          ${footerString}
-        </div>
-        `,
-      });
-    } else { // 웹페이지에서 클릭한 파일
+    // 웹페이지에서 클릭한 파일
       Swal.fire({
         icon: "error",
         title: "메타데이터 없음!",
@@ -668,10 +652,12 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version
         cancelButtonColor: `${colorClose}`,
         backdrop: true,
         preConfirm: async () => {
-          const res = await GM_fetch(getOptimizedImageURL(url), {
-            headers: { Referer: `${location.protocol}//${location.hostname}` },
-          });
-          const blob = await res.blob();
+          if (url != null) {
+            const res = await GM_fetch(getOptimizedImageURL(url), {
+              headers: { Referer: `${location.protocol}//${location.hostname}` },
+            });
+            const blob = await res.blob();
+          };
           let formData = new FormData();
           formData.append('threshold', '0.4');
           formData.append('format', 'json');
@@ -693,10 +679,12 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version
             });
         },
         preDeny: async () => {
-          const res = await GM_fetch(getOptimizedImageURL(url), {
-            headers: { Referer: `${location.protocol}//${location.hostname}` },
-          });
-          const blob = await res.blob();
+          if (url != null) {
+            const res = await GM_fetch(getOptimizedImageURL(url), {
+              headers: { Referer: `${location.protocol}//${location.hostname}` },
+            });
+            const blob = await res.blob();
+          };
           const optimizedBase64 = await blobToBase64(blob);
 
           return fetch("https://smilingwolf-wd-v1-4-tags.hf.space/run/predict", {
@@ -734,7 +722,6 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version
             `,
         });
       });
-    };
   }
 
   function fileToBlob(file) {
