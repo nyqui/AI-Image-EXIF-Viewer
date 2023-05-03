@@ -6,7 +6,7 @@
 // @match       https://arca.live/b/hypernetworks*
 // @match       https://arca.live/b/aiartreal*
 // @match       https://arca.live/b/aireal*
-// @version     1.12.0-alpha.3
+// @version     1.12.0-alpha.4
 // @author      nyqui
 // @require     https://greasyfork.org/scripts/452821-upng-js/code/UPNGjs.js?version=1103227
 // @require     https://cdn.jsdelivr.net/npm/casestry-exif-library@2.0.3/dist/exif-library.min.js
@@ -34,11 +34,11 @@ const colorOption2 = "#ff9d0b";
 const colorClose = "#b41b29";
 
 
-const footerString = "<div class=\"version\">v" + GM_info.script.version
-  + "  -  <a href=\"" + scriptGreasyforkURL + "\" target=\"_blank\">Greasy Fork</a>  -  <a href=\""
-  + GM_info.script.namespace + "\" target=\"_blank\">GitHub</a></div>";
+const footerString = "<div class=\"version\">v" + GM_info.script.version +
+  "  -  <a href=\"" + scriptGreasyforkURL + "\" target=\"_blank\">Greasy Fork</a>  -  <a href=\"" +
+  GM_info.script.namespace + "\" target=\"_blank\">GitHub</a></div>";
 
-(async function () {
+(async function() {
   "use strict";
 
   const modalCSS = /* css */ `
@@ -336,7 +336,9 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version
           .decode(userCommentData)
           .replace("UNICODE", "")
           .replaceAll("\u0000", "");
-        return { parameters };
+        return {
+          parameters
+        };
       } else {
         return null;
       }
@@ -375,14 +377,14 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version
         }
 
         metadata.prompt =
-          parameters.indexOf("Negative prompt") === 0
-            ? "정보 없음"
-            : parameters.substring(0, parameters.indexOf("Negative prompt:"));
-        metadata.negativePrompt = parameters.includes("Negative prompt:")
-          ? parameters
-              .substring(parameters.indexOf("Negative prompt:"), parameters.indexOf("Steps:"))
-              .replace("Negative prompt:", "")
-          : null;
+          parameters.indexOf("Negative prompt") === 0 ?
+          "정보 없음" :
+          parameters.substring(0, parameters.indexOf("Negative prompt:"));
+        metadata.negativePrompt = parameters.includes("Negative prompt:") ?
+          parameters
+          .substring(parameters.indexOf("Negative prompt:"), parameters.indexOf("Steps:"))
+          .replace("Negative prompt:", "") :
+          null;
 
         return metadata;
       } else if (exif.Description) {
@@ -453,14 +455,14 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version
     (metadata?.["AddNet Enabled"] ||
       metadata?.prompt?.includes("lora:") ||
       metadata?.negativePrompt?.includes("lora:")) &&
-      inferList.push("LoRa");
+    inferList.push("LoRa");
     (metadata?.prompt?.includes("lyco:") ||
       metadata?.negativePrompt?.includes("lyco:")) &&
-      inferList.push("LyCORIS");
+    inferList.push("LyCORIS");
     (metadata?.["Hypernet"] ||
       metadata?.prompt?.includes("hypernet:") ||
       metadata?.negativePrompt?.includes("hypernet:")) &&
-      inferList.push("Hypernet");
+    inferList.push("Hypernet");
 
     const controlNetRegex = /ControlNet-?\d? Enabled/;
     for (const key in metadata) {
@@ -645,6 +647,7 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version
         `
       });
     };
+
     function getOptimizedImageURL(url) {
       if (isArca) {
         return url.replace("ac.namu.la", "ac-o.namu.la").replace("&type=orig", "");
@@ -656,99 +659,107 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version
           .replace(`.${extension}`, "_master1200.jpg");
       }
     }
-      noMeta.fire({
-        icon: "error",
-        title: "메타데이터 없음!",
-        text: "찾아볼까요?",
-        showCancelButton: true,
-        showDenyButton: true,
-        confirmButtonText: "Danbooru Autotagger",
-        denyButtonText: "WD 1.4 Tagger",
-        cancelButtonText: "아니오",
-        showLoaderOnConfirm: true,
-        showLoaderOnDeny: true,
-        focusCancel: true,
-        confirmButtonColor: `${colorOption1}`,
-        denyButtonColor: `${colorOption2}`,
-        cancelButtonColor: `${colorClose}`,
-        backdrop: true,
-        preConfirm: async () => {
-          if (url != null) {
-            const res = await GM_fetch(getOptimizedImageURL(url), {
-              headers: { Referer: `${location.protocol}//${location.hostname}` },
-            });
-            blob = await res.blob();
-          };
-          let formData = new FormData();
-          formData.append('threshold', '0.4');
-          formData.append('format', 'json');
-          formData.append('file', blob);
+    noMeta.fire({
+      icon: "error",
+      title: "메타데이터 없음!",
+      text: "찾아볼까요?",
+      showCancelButton: true,
+      showDenyButton: true,
+      confirmButtonText: "Danbooru Autotagger",
+      denyButtonText: "WD 1.4 Tagger",
+      cancelButtonText: "아니오",
+      showLoaderOnConfirm: true,
+      showLoaderOnDeny: true,
+      focusCancel: true,
+      confirmButtonColor: `${colorOption1}`,
+      denyButtonColor: `${colorOption2}`,
+      cancelButtonColor: `${colorClose}`,
+      backdrop: true,
+      preConfirm: async () => {
+        if (url != null) {
+          const res = await GM_fetch(getOptimizedImageURL(url), {
+            headers: {
+              Referer: `${location.protocol}//${location.hostname}`
+            },
+          });
+          blob = await res.blob();
+        };
+        let formData = new FormData();
+        formData.append('threshold', '0.4');
+        formData.append('format', 'json');
+        formData.append('file', blob);
 
-          return GM_fetch("https://autotagger.donmai.us/evaluate", {
+        return GM_fetch("https://autotagger.donmai.us/evaluate", {
             method: "POST",
             body: formData,
           })
-            .then((res) => {
-              if (!res.status === 200) {
-                Swal.showValidationMessage(`https://autotagger.donmai.us 접속되는지 확인!`);
-              }
-              return res.json();
-            })
-            .catch((error) => {
-              console.log(error);
+          .then((res) => {
+            if (!res.status === 200) {
               Swal.showValidationMessage(`https://autotagger.donmai.us 접속되는지 확인!`);
-            });
-        },
-        preDeny: async () => {
-          if (url != null) {
-            const res = await GM_fetch(getOptimizedImageURL(url), {
-              headers: { Referer: `${location.protocol}//${location.hostname}` },
-            });
-            blob = await res.blob();
-          };
-          const optimizedBase64 = await blobToBase64(blob);
+            }
+            return res.json();
+          })
+          .catch((error) => {
+            console.log(error);
+            Swal.showValidationMessage(`https://autotagger.donmai.us 접속되는지 확인!`);
+          });
+      },
+      preDeny: async () => {
+        if (url != null) {
+          const res = await GM_fetch(getOptimizedImageURL(url), {
+            headers: {
+              Referer: `${location.protocol}//${location.hostname}`
+            },
+          });
+          blob = await res.blob();
+        };
+        const optimizedBase64 = await blobToBase64(blob);
 
-          return fetch("https://smilingwolf-wd-v1-4-tags.hf.space/run/predict", {
+        return fetch("https://smilingwolf-wd-v1-4-tags.hf.space/run/predict", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+              "Content-Type": "application/json"
+            },
             body: JSON.stringify({
               data: [optimizedBase64, "SwinV2", 0.35, 0.85],
             }),
           })
-            .then((res) => res.json())
-            .catch((error) => {
-              Swal.showValidationMessage(error);
-            });
-        },
-        allowOutsideClick: () => !Swal.isLoading(),
-      }).then((result) => {
-        if (result.isDismissed) return;
-        let tags;
-        if (result.isConfirmed) {
-          tags = Object.keys(result.value[0].tags).join(', ').replaceAll('_', ' ');
-        } else if (result.isDenied) {
-          tags = result.value.data[3]?.label
-            ? `${result.value.data[3]?.label}, ${result.value.data[0]}`
-            : result.value.data[0];
-        }
+          .then((res) => res.json())
+          .catch((error) => {
+            Swal.showValidationMessage(error);
+          });
+      },
+      allowOutsideClick: () => !Swal.isLoading(),
+    }).then((result) => {
+      if (result.isDismissed) return;
+      let tags;
+      if (result.isConfirmed) {
+        tags = Object.keys(result.value[0].tags).join(', ').replaceAll('_', ' ');
+      } else if (result.isDenied) {
+        tags = result.value.data[3]?.label ?
+          `${result.value.data[3]?.label}, ${result.value.data[0]}` :
+          result.value.data[0];
+      }
 
-        Swal.fire({
+      Swal.fire({
         confirmButtonColor: `${colorClose}`,
         confirmButtonText: "닫기",
-          html: /*html*/ `
+        html: /*html*/ `
             <div class="md-title">Output
               <span class="md-copy md-button" data-clipboard-target="#md-tags"></span>
             </div>
             <div class="md-info" id="md-tags">${tags}</div>
             `,
-        });
       });
+    });
   }
 
   function fileToBlob(file) {
     return new Promise((resolve) => {
       const reader = new FileReader();
-      reader.onload = () => resolve(new Blob([reader.result], { type: file.type }));
+      reader.onload = () => resolve(new Blob([reader.result], {
+        type: file.type
+      }));
       reader.readAsArrayBuffer(file);
     });
   }
@@ -785,14 +796,18 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version
         case "image/webp": {
           const exif = exifLib.load(await blobToBase64(blob));
           const parameters = exif.Exif[37510].replace("UNICODE", "").replaceAll("\u0000", "");
-          return { parameters };
+          return {
+            parameters
+          };
         }
         case "image/png": {
           const chunks = UPNG.decode(await blob.arrayBuffer());
           let parameters = chunks.tabs.tEXt?.parameters || chunks.tabs.iTXt?.parameters;
           const description = chunks.tabs.tEXt?.Description || chunks.tabs.iTXt?.Description;
           if (parameters) {
-            return { parameters };
+            return {
+              parameters
+            };
           } else if (description) {
             return chunks.tabs?.tEXt || chunks.tabs?.iTXt;
           } else {
@@ -819,7 +834,9 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version
           GM_xmlhttpRequest({
             url,
             responseType: "stream",
-            headers: { Referer },
+            headers: {
+              Referer
+            },
             onreadystatechange: (data) => {
               resolve(data);
             },
@@ -835,7 +852,9 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version
         reader = response.response.getReader();
       } else {
         response = await GM_fetch(url, {
-          headers: { Referer },
+          headers: {
+            Referer
+          },
         });
         contentType = response.headers.get("content-type");
         reader = response.body.getReader();
@@ -852,7 +871,10 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version
       let metadata;
       let chunks = [];
       while (true) {
-        const { done, value } = await reader.read();
+        const {
+          done,
+          value
+        } = await reader.read();
         if (done || metadata || metadata === null) {
           reader.cancel();
           break;
@@ -875,11 +897,15 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version
         }
       }
       if (contentType === "image/webp") {
-        const blob = new Blob(chunks, { type: "image/webp" });
+        const blob = new Blob(chunks, {
+          type: "image/webp"
+        });
         const base64 = await blobToBase64(blob);
         const exif = exifLib.load(base64);
         const parameters = exif.Exif[37510].replace("UNICODE", "").replaceAll("\u0000", "");
-        metadata = { parameters };
+        metadata = {
+          parameters
+        };
       }
       return metadata;
     } catch (error) {
@@ -916,7 +942,11 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version
     console.timeEnd("modal open");
   }
 
-  const { hostname, href, pathname } = location;
+  const {
+    hostname,
+    href,
+    pathname
+  } = location;
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
   const isPixiv = hostname === "www.pixiv.net";
   const isArca = hostname === "arca.live";
@@ -938,22 +968,22 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version
 
     let isAi = false;
     if (!isMobile) {
-      document.arrive("footer > ul > li > span > a", function () {
+      document.arrive("footer > ul > li > span > a", function() {
         if (this.href === "https://www.pixiv.help/hc/articles/11866167926809") isAi = true;
       });
-      document.arrive("div[role=presentation]:last-child > div > div", function () {
+      document.arrive("div[role=presentation]:last-child > div > div", function() {
         isAi && this.click();
       });
     } else {
       document.arrive("a.ai-generated", () => {
         isAi = true;
       });
-      document.arrive("button.nav-back", function () {
+      document.arrive("button.nav-back", function() {
         isAi && this.click();
       });
     }
 
-    document.arrive("a > img", function () {
+    document.arrive("a > img", function() {
       if (this.alt === "pixiv") return;
 
       if (isAi) {
@@ -964,7 +994,7 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version
           src = getOriginalUrl(this.src);
         }
 
-        this.onclick = function () {
+        this.onclick = function() {
           extract(src);
         };
       }
@@ -972,7 +1002,9 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version
   }
 
   if (isArcaViewer) {
-    document.arrive('a[href$="type=orig"] > img', { existing: true }, function () {
+    document.arrive('a[href$="type=orig"] > img', {
+      existing: true
+    }, function() {
       if (this.classList.contains("channel-icon")) return;
 
       this.parentNode.onclick = (event) => {
@@ -980,7 +1012,7 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version
           event.preventDefault();
         }
       };
-      this.onclick = function () {
+      this.onclick = function() {
         const src = `${this.src}&type=orig`;
         extract(src);
       };
@@ -988,7 +1020,9 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version
   }
 
   if (isArcaEditor) {
-    document.arrive(".images-multi-upload", { onceOnly: true }, () => {
+    document.arrive(".images-multi-upload", {
+      onceOnly: true
+    }, () => {
       document.getElementById("saveExif").checked = true;
     });
   }
