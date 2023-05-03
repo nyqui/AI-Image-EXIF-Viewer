@@ -6,7 +6,7 @@
 // @match       https://arca.live/b/hypernetworks*
 // @match       https://arca.live/b/aiartreal*
 // @match       https://arca.live/b/aireal*
-// @version     1.12.0-alpha.1
+// @version     1.12.0-alpha.2
 // @author      nyqui
 // @require     https://greasyfork.org/scripts/452821-upng-js/code/UPNGjs.js?version=1103227
 // @require     https://cdn.jsdelivr.net/npm/casestry-exif-library@2.0.3/dist/exif-library.min.js
@@ -509,8 +509,7 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version
   function showMetadataModal(metadata, url) {
     metadata = parseMetadata(metadata);
     const inferList = infer(metadata);
-    if (url === undefined) url = "/";
-    Swal.fire({
+    const showMeta = Swal.mixin({
       title: "메타데이터 요약",
       html: /*html*/ `
     <div class="md-grid">
@@ -602,13 +601,26 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version
       confirmButtonText: "이미지 열기",
       denyButtonText: "이미지 저장",
       cancelButtonText: "닫기"
-    }).then((result) => {
-      if (result.isConfirmed) {
-        window.open(url, '_blank');
-      } else if (result.isDenied) {
-        GM_download(url, getFileName(url));
-      }
-    });
+    })
+
+    if (url != null) {
+      showMeta.fire().then((result) => {
+        if (result.isConfirmed) {
+          window.open(url, '_blank');
+        } else if (result.isDenied) {
+          GM_download(url, getFileName(url));
+        }
+      });
+    } else {
+      showMeta.fire({
+        showDenyButton: false,
+        showCancelButton: false,
+        focusCancel: false,
+        focusConfirm: true,
+        confirmButtonColor: `${colorClose}`,
+        confirmButtonText: "닫기",
+      });
+    };
     showAndHide(".md-show-and-hide");
   }
 
@@ -625,8 +637,6 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version
       }
     }
 
-    // 드래그 & 드롭 파일
-    // 웹페이지에서 클릭한 파일
       Swal.fire({
         icon: "error",
         title: "메타데이터 없음!",
@@ -656,7 +666,7 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version
             const res = await GM_fetch(getOptimizedImageURL(url), {
               headers: { Referer: `${location.protocol}//${location.hostname}` },
             });
-            const blob = await res.blob();
+            blob = await res.blob();
           };
           let formData = new FormData();
           formData.append('threshold', '0.4');
@@ -683,7 +693,7 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version
             const res = await GM_fetch(getOptimizedImageURL(url), {
               headers: { Referer: `${location.protocol}//${location.hostname}` },
             });
-            const blob = await res.blob();
+            blob = await res.blob();
           };
           const optimizedBase64 = await blobToBase64(blob);
 
