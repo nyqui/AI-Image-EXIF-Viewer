@@ -6,7 +6,7 @@
 // @match       https://arca.live/b/hypernetworks*
 // @match       https://arca.live/b/aiartreal*
 // @match       https://arca.live/b/aireal*
-// @version     1.13.0-alpha.1
+// @version     1.13.0-alpha.2
 // @author      nyqui
 // @require     https://greasyfork.org/scripts/452821-upng-js/code/UPNGjs.js?version=1103227
 // @require     https://cdn.jsdelivr.net/npm/casestry-exif-library@2.0.3/dist/exif-library.min.js
@@ -42,6 +42,7 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
   "use strict";
 
   const modalCSS = /* css */ `
+  font-family: -apple-system, BlinkMacSystemFont, NanumBarunGothic, NanumGothic, system-ui, sans-serif;
   .swal2-popup {
     font-size: 15px;
   }
@@ -165,7 +166,7 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
   }
 
   .version {
-    margin: 0;
+    margin: 1px;
     text-align: right;
     font-size: .5em;
     font-style: italic;
