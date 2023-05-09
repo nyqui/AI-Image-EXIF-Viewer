@@ -26,7 +26,9 @@ Intended for Korean users - English locale is currently not planned.
 ## Version changes
 ### 1.12.1 2023-05-09 23:xx
 
- 1. blah
+ 1. infer 변경점:
+     - DINO를 DDetailer로 변경 및 인식문구 수정
+     - ADetailer 추가
 
 ### 1.12.0 2023-05-04 02:09
 
