@@ -262,12 +262,16 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
 
       const blob = await fileToBlob(file);
       const type = blob.type;
-      if (!isSupportedImageFormat(blob.type)) {
-        notSupportedFormat();
+      if (isArcaEditor) {
         return;
+      } else {
+        if (!isSupportedImageFormat(blob.type)) {
+          notSupportedFormat();
+          return;
+        }
+        const metadata = await extractImageMetadata(blob, type);
+        metadata ? showMetadataModal(metadata) : showTagExtractionModal(null, blob);
       }
-      const metadata = await extractImageMetadata(blob, type);
-      metadata ? showMetadataModal(metadata) : showTagExtractionModal(null, blob);
     }
 
     setupEventListeners() {
@@ -944,7 +948,8 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
     console.time("modal open");
     console.time("fetch");
     const metadata = await fetchAndDecode(url);
-    console.timeEnd("fetch");
+    console.
+    ("fetch");
     console.log(metadata);
 
     if (metadata?.Description || metadata?.parameters || metadata?.["sd-metadata"]) {
@@ -954,7 +959,46 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
     }
     console.timeEnd("modal open");
   }
+  
+  function getCSRFToken() {
+    return new Promise(resolve => {
+      const csrf = document.querySelector("input[name=_csrf]")
+      const token = document.querySelector("input[name=token]")
+      if (csrf && token) {
+        resolve([csrf.value, token.value])
+      }
+    })
+  }
 
+  function uploadImage(blob, token = null, saveEXIF = false) {
+    return new Promise(async (resolve, reject) => {
+      let xhr = new XMLHttpRequest();
+      let formData = new FormData();
+      if (!document.querySelector("#article_write_form > input[name=token]")) {
+        await getCSRFToken().then(tokenList => {
+            token = tokenList[1]
+        })
+      }
+
+      formData.append('upload', blob, Math.random().toString(36).substring(7) + '.jpg');
+      formData.append('token', token || document.querySelector("#article_write_form > input[name=token]").value);
+      formData.append('saveExif', saveEXIF);
+      formData.append('saveFilename', false);
+
+      xhr.onload = function() {
+        let response = JSON.parse(xhr.responseText)
+        if (response.uploaded === true) {
+          resolve(response.url)
+        } else {
+          alert("이미지 업로드 실패: " + xhr.responseText)
+          console.error(xhr.responseText);
+        }
+      }
+      xhr.open("POST", "https://arca.live/b/upload");
+      xhr.send(formData);
+    });
+  }
+  
   const {
     hostname,
     href,
