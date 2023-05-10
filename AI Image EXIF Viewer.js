@@ -6,7 +6,7 @@
 // @match       https://arca.live/b/hypernetworks*
 // @match       https://arca.live/b/aiartreal*
 // @match       https://arca.live/b/aireal*
-// @version     1.13.0-alpha.2
+// @version     2.0.0
 // @author      nyqui
 // @require     https://greasyfork.org/scripts/452821-upng-js/code/UPNGjs.js?version=1103227
 // @require     https://cdn.jsdelivr.net/npm/casestry-exif-library@2.0.3/dist/exif-library.min.js
@@ -491,10 +491,11 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
     metadata?.["Ultimate SD upscale upscaler"] && inferList.push("Ultimate SD upscale");
     metadata?.["Latent Couple"] && inferList.push("Latent Couple");
     metadata?.["Dynamic thresholding enabled"] && inferList.push("Dynamic thresholding");
-    metadata?.["1 DINO "] && inferList.push("DINO");
     metadata?.["LLuL Enabled"] && inferList.push("LLuL");
     metadata?.["Cutoff enabled"] && inferList.push("Cutoff");
     metadata?.["Tiled Diffusion"] && inferList.push("Tiled Diffusion");
+    metadata?.["DDetailer model a"] && inferList.push("DDetailer");
+    metadata?.["ADetailer version"] && inferList.push("ADetailer"); // DDetailer/ADetailer를 DINO 하나로 묶는 게 나을까?
 
     return inferList;
   }
