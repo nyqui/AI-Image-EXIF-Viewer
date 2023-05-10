@@ -6,7 +6,7 @@
 // @match       https://arca.live/b/hypernetworks*
 // @match       https://arca.live/b/aiartreal*
 // @match       https://arca.live/b/aireal*
-// @version     2.0.0-alpha.3
+// @version     2.0.0-alpha.4
 // @author      nyqui
 // @require     https://greasyfork.org/scripts/452821-upng-js/code/UPNGjs.js?version=1103227
 // @require     https://cdn.jsdelivr.net/npm/casestry-exif-library@2.0.3/dist/exif-library.min.js
@@ -263,7 +263,13 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
       const blob = await fileToBlob(file);
       const type = blob.type;
       if (isArcaEditor) {
+        let embeduploaded
         uploadImage(blob, GM_getValue("saveExifDefault"))
+          .then(url => {
+            let editor = document.querySelector('.write-body .fr-element')
+            editor.innerHTML = editor.innerHTML + `<img src="${url}" class="fr-fic fr-dii">`
+            modal.style.display = "none"
+          })
       } else {
         if (!isSupportedImageFormat(blob.type)) {
           notSupportedFormat();
