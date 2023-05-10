@@ -6,7 +6,7 @@
 // @match       https://arca.live/b/hypernetworks*
 // @match       https://arca.live/b/aiartreal*
 // @match       https://arca.live/b/aireal*
-// @version     2.0.0
+// @version     2.0.0-alpha.1
 // @author      nyqui
 // @require     https://greasyfork.org/scripts/452821-upng-js/code/UPNGjs.js?version=1103227
 // @require     https://cdn.jsdelivr.net/npm/casestry-exif-library@2.0.3/dist/exif-library.min.js
@@ -948,8 +948,7 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
     console.time("modal open");
     console.time("fetch");
     const metadata = await fetchAndDecode(url);
-    console.
-    ("fetch");
+    console.timeEnd("fetch");
     console.log(metadata);
 
     if (metadata?.Description || metadata?.parameters || metadata?.["sd-metadata"]) {
@@ -959,7 +958,7 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
     }
     console.timeEnd("modal open");
   }
-  
+
   function getCSRFToken() {
     return new Promise(resolve => {
       const csrf = document.querySelector("input[name=_csrf]")
@@ -998,7 +997,7 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
       xhr.send(formData);
     });
   }
-  
+
   const {
     hostname,
     href,
