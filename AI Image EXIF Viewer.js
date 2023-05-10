@@ -6,7 +6,7 @@
 // @match       https://arca.live/b/hypernetworks*
 // @match       https://arca.live/b/aiartreal*
 // @match       https://arca.live/b/aireal*
-// @version     2.0.0-alpha.5
+// @version     2.0.0-beta.1
 // @author      nyqui
 // @require     https://greasyfork.org/scripts/452821-upng-js/code/UPNGjs.js?version=1103227
 // @require     https://cdn.jsdelivr.net/npm/casestry-exif-library@2.0.3/dist/exif-library.min.js
@@ -266,20 +266,23 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
         const uploadableType = handleUploadable(type)
         let editor = document.querySelector('.write-body .fr-element')
         if (uploadableType == "image") {
-          uploadImage(blob, GM_getValue("saveExifDefault"))
+          uploadArca(blob, uploadableType, GM_getValue("saveExifDefault"))
             .then(url => {
               editor.innerHTML = editor.innerHTML + `<img src="${url}" class="fr-fic fr-dii">`
+              Swal.close();
             })
         } else if (uploadableType == "video") {
-          uploadImage(blob, false)
+          uploadArca(blob, uploadableType, false)
             .then(url => {
               editor.innerHTML = editor.innerHTML + `<span class="fr-video fr-dvi fr-draggable"><video class="fr-draggable" controls="" loop="" muted="" playsinline="" src="${url}">귀하의 브라우저는 html5 video를 지원하지 않습니다.</video></span>`
+              Swal.close();
           })
         } else {
+          Swal.close();
           toastmix.fire({
             icon: "error",
             title: `업로드 오류:
-                    지원하는 포맷이 아닙니다.`,
+                    업로드 할 수 있는 포맷이 아닙니다.`,
           });
         }
       } else {
@@ -999,9 +1002,14 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
     })
   }
 
-  function uploadImage(blob, saveEXIF = true, token = null) {
+  function uploadArca(blob, type, saveEXIF = true, token = null) {
     return new Promise(async (resolve, reject) => {
+      let swalText = "비디오는 EXIF 보존 설정에 영향을 받지 않습니다.";
+      if (type == "image") {
+        swalText = "EXIF 보존: " + saveEXIF;
+      }
       let xhr = new XMLHttpRequest();
+      xhr.upload.addEventListener("progress", null, false);
       let formData = new FormData();
       if (!document.querySelector("#article_write_form > input[name=token]")) {
         await getCSRFToken().then(tokenList => {
@@ -1019,12 +1027,25 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
         if (response.uploaded === true) {
           resolve(response.url)
         } else {
-          alert("이미지 업로드 실패: " + xhr.responseText)
+          Swal.close();
           console.error(xhr.responseText);
+          toastmix.fire({
+            icon: "error",
+            title: `업로드 오류`,
+          });
         }
       }
       xhr.open("POST", "https://arca.live/b/upload");
       xhr.send(formData);
+      Swal.fire({
+        title: '파일 업로드중',
+        text: swalText,
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading()
+        },
+      });
     });
   }
 
