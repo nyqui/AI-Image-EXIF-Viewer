@@ -6,7 +6,7 @@
 // @match       https://arca.live/b/hypernetworks*
 // @match       https://arca.live/b/aiartreal*
 // @match       https://arca.live/b/aireal*
-// @version     2.0.0-alpha.1
+// @version     2.0.0-alpha.2
 // @author      nyqui
 // @require     https://greasyfork.org/scripts/452821-upng-js/code/UPNGjs.js?version=1103227
 // @require     https://cdn.jsdelivr.net/npm/casestry-exif-library@2.0.3/dist/exif-library.min.js
@@ -969,7 +969,7 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
     })
   }
 
-  function uploadImage(blob, token = null, saveEXIF = false) {
+  function uploadImage(blob, saveEXIF = true, token = null) {
     return new Promise(async (resolve, reject) => {
       let xhr = new XMLHttpRequest();
       let formData = new FormData();
@@ -1083,7 +1083,7 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
     });
   }
 
-  !isMobile && !isPixivDragUpload && !isArcaEditor && new DropZone();
+  !isMobile && !isPixivDragUpload && new DropZone();
   GM_addStyle(modalCSS);
   new ClipboardJS(".md-copy");
   registerMenu();
