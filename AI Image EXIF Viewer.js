@@ -6,7 +6,7 @@
 // @match       https://arca.live/b/hypernetworks*
 // @match       https://arca.live/b/aiartreal*
 // @match       https://arca.live/b/aireal*
-// @version     1.12.2
+// @version     2.0.0
 // @author      nyqui
 // @require     https://greasyfork.org/scripts/452821-upng-js/code/UPNGjs.js?version=1103227
 // @require     https://cdn.jsdelivr.net/npm/casestry-exif-library@2.0.3/dist/exif-library.min.js
@@ -173,6 +173,14 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
   }
   `;
 
+  const toastmix = Swal.mixin({
+    toast: true,
+    position: "bottom",
+    showConfirmButton: false,
+    timer: `${toastTimer}`,
+    timerProgressBar: true,
+  });
+
   function registerMenu() {
     try {
       if (typeof GM_registerMenuCommand == undefined) {
@@ -181,33 +189,40 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
         GM_registerMenuCommand("(로그인 필수) Pixiv 뷰어 사용 토글", () => {
           if (GM_getValue("usePixiv", false)) {
             GM_setValue("usePixiv", false);
-            Swal.fire({
-              toast: true,
-              position: "bottom",
-              showConfirmButton: false,
-              timer: `${toastTimer}`,
+            toastmix.fire({
               icon: "error",
               title: `Pixiv 비활성화
                       창이 닫힌 후 새로고침 됩니다`,
-              timerProgressBar: true,
               didDestroy: () => {
                 location.reload();
               },
             });
           } else {
             GM_setValue("usePixiv", true);
-            Swal.fire({
-              toast: true,
-              position: "bottom",
-              showConfirmButton: false,
-              timer: `${toastTimer}`,
+            toastmix.fire({
               icon: "success",
               title: `Pixiv 활성화
                       창이 닫힌 후 새로고침 됩니다`,
-              timerProgressBar: true,
               didDestroy: () => {
                 location.reload();
               },
+            });
+          }
+        });
+        GM_registerMenuCommand("아카라이브 EXIF 보존 토글", () => {
+          if (GM_getValue("saveExifDefault", true)) {
+            GM_setValue("saveExifDefault", false);
+            toastmix.fire({
+              icon: "error",
+              title: `아카라이브 EXIF 보존 비활성화
+                      다음번 작성시부터 버려집니다`,
+            });
+          } else {
+            GM_setValue("saveExifDefault", true);
+            toastmix.fire({
+              icon: "success",
+              title: `아카라이브 EXIF 보존 활성화
+                      다음번 작성시부터 보존됩니다`,
             });
           }
         });
@@ -775,12 +790,8 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
   }
 
   function notSupportedFormat() {
-    Swal.fire({
-      toast: true,
+    toastmix.fire({
       position: "top-end",
-      showConfirmButton: false,
-      timer: `${toastTimer}`,
-      timerProgressBar: true,
       icon: "error",
       title: "지원하지 않는 파일 형식입니다.",
     });
@@ -1021,7 +1032,7 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
     });
   }
 
-  if (isArcaEditor) {
+  if (GM_getValue("saveExifDefault", true) && isArcaEditor) {
     document.arrive(".images-multi-upload", {
       onceOnly: true
     }, () => {
