@@ -15,6 +15,12 @@ AI Image EXIF Viewer for select channels in arca.live, and pixiv.
 Intended for Korean users - English locale is currently not planned.
 
 ## Version changes
+### 1.12.2 2023-05-10 17:11
+
+ 1. pixiv에서 표시되는 오류 수정
+     - 한국어 폰트 baseline이 일정하지 않는 등 표시 오류 수정
+     - footer에 스크롤바 나타나는 오류 수정
+
 ### 1.12.1 2023-05-09 23:23
 
  1. infer 변경점:
