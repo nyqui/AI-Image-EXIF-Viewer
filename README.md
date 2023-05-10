@@ -1,15 +1,6 @@
 # AI-Image-EXIF-Viewer
+https://github.com/nyqui/AI-Image-EXIF-Viewer
 
-## ⚠️⚠️⚠️ 이곳은 개발중인 장소입니다. ⚠️⚠️⚠️
- 코드가 안정화되지 않았을 수 있으며, main에 merge 및 Greasy Fork로 release되기 전 언제던 변경될 수 있습니다.
- 
-## TODO:
- 1. 메타데이터 없는 이미지 팝업에서 Image Open 하면 팝업도 동시에 닫히도록?
- 1. ~~드래그 + 드롭한, 메타데이터 없는 이미지도 분석이 어떻게 가능하지 않을까? deepdanbooru는 될 거로 보였었는데 며칠째 503 뜨면서 열리질 않아서 확인 못함~~ 1.12.0
- 2. ~~deepdanbooru.donmai.us 말고 다른 데로 바꿀 수 있을까?~~ autotagger.donmai.us
- 3. ~~Swal.mixin({ ...options })로 통일화하기 (버튼 디폴트값, 토스트 알림들 등등)~~
- 1. 아카 글쓰기/수정에서 드래그 + 드롭한 이미지 EXIF 살리기
---- 
 https://greasyfork.org/ko/scripts/464214
 
 ## ⚠️⚠️⚠️ 이곳은 개발중인 장소입니다. ⚠️⚠️⚠️
@@ -41,6 +32,8 @@ Intended for Korean users - English locale is currently not planned.
  1. 이제 이 확장기능이 동작하는 아카 채널(AI 그림/반실사/실사/학습)에서 EXIF를 기본으로 저장할지, 버릴지를 선택할 수 있습니다.
      - 스크립트 관리자 (Tampermonkey 등) - "AI 이미지 EXIF 뷰어" 아래에 있습니다.
      - 기본값은 종전처럼 "저장" 입니다. ("이미지 업로드" - "Exif 데이터 보존" 체크)
+ 1. 이제 위와 같은 아카 채널에서 글쓰기/수정시 이미지를 드래그+드롭해도 EXIF가 보존될 수 있습니다.
+     - 위 설정에 따라 보존여부가 결정됩니다.
 
 ### 1.12.2 2023-05-10 17:11
 
