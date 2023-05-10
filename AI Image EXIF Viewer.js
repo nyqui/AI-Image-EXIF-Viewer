@@ -6,7 +6,7 @@
 // @match       https://arca.live/b/hypernetworks*
 // @match       https://arca.live/b/aiartreal*
 // @match       https://arca.live/b/aireal*
-// @version     2.0.0-alpha.4
+// @version     2.0.0-alpha.5
 // @author      nyqui
 // @require     https://greasyfork.org/scripts/452821-upng-js/code/UPNGjs.js?version=1103227
 // @require     https://cdn.jsdelivr.net/npm/casestry-exif-library@2.0.3/dist/exif-library.min.js
@@ -263,13 +263,25 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
       const blob = await fileToBlob(file);
       const type = blob.type;
       if (isArcaEditor) {
-        let embeduploaded
-        uploadImage(blob, GM_getValue("saveExifDefault"))
-          .then(url => {
-            let editor = document.querySelector('.write-body .fr-element')
-            editor.innerHTML = editor.innerHTML + `<img src="${url}" class="fr-fic fr-dii">`
-            modal.style.display = "none"
+        const uploadableType = handleUploadable(type)
+        let editor = document.querySelector('.write-body .fr-element')
+        if (uploadableType == "image") {
+          uploadImage(blob, GM_getValue("saveExifDefault"))
+            .then(url => {
+              editor.innerHTML = editor.innerHTML + `<img src="${url}" class="fr-fic fr-dii">`
+            })
+        } else if (uploadableType == "video") {
+          uploadImage(blob, false)
+            .then(url => {
+              editor.innerHTML = editor.innerHTML + `<span class="fr-video fr-dvi fr-draggable"><video class="fr-draggable" controls="" loop="" muted="" playsinline="" src="${url}">귀하의 브라우저는 html5 video를 지원하지 않습니다.</video></span>`
           })
+        } else {
+          toastmix.fire({
+            icon: "error",
+            title: `업로드 오류:
+                    지원하는 포맷이 아닙니다.`,
+          });
+        }
       } else {
         if (!isSupportedImageFormat(blob.type)) {
           notSupportedFormat();
@@ -810,6 +822,18 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
   function isSupportedImageFormat(url) {
     const supportedExtensions = /\.(png|jpe?g|webp)|image\/(jpeg|webp|png)/;
     return supportedExtensions.test(url);
+  }
+
+  function handleUploadable(MIME) {
+    const uploadableSubtypes = /(jpe?g|jfif|pjp|png|gif|web[pm]|mov|mp4|m4[ab])/;
+    const [type, subtype] = MIME.split('/');
+    console.log(type);
+    console.log(subtype);
+    if (uploadableSubtypes.test(subtype)) {
+      return type;
+    } else {
+      return null;
+    }
   }
 
   async function extractImageMetadata(blob, type) {
