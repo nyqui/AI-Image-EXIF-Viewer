@@ -1,18 +1,17 @@
 # AI-Image-EXIF-Viewer
-https://greasyfork.org/ko/scripts/464214
+https://greasyfork.org/scripts/464214
 
-이미지 파일을 클릭하면 해당 이미지의 메타데이터를 읽고, AI 이미지 생성에 관련된 정보가 있다면 이를 표시합니다.
+When an image is clicked in supported websites/subreddits/channels, the script attempts to read its EXIF metadata.
 
-관련 메타데이터가 없다면 외부 서비스와 연동해 이미지에 매칭되는 프롬프트를 도출할 수 있습니다.
+If information related to AI image generation is detected, it will be shown.
 
-아카라이브 AI 그림/반실사/실사 채널, pixiv(로그인 필요) 에서 작동합니다.
+If no relevant info is detected, then outside services can be called upon by the user to generate tags related to the image content.
 
-또한 컴퓨터에 이미 저장된 이미지를 해당 채널/사이트 창에 드래그 + 드롭하면 마찬가지로 메타데이터 읽기를 시도합니다.
+Works on pixiv, select channels on arca.live, and select subreddits on reddit (although reddit, like many other websites, strips all metadata by default, so only the tag generation functionality will be useful).
 
-(이때도 관련 메타데이터가 없을 시 프롬프트 매칭을 시도할 수 있습니다.)
+Also, if an image file is dragged & dropped onto the browser while browsing the supported webpages, it will be read to attempt to show the metadata or find related tags. (Keep in mind that this functionality will be disabled while writing a post to enable drag&drop uploads)
 
-AI Image EXIF Viewer for select channels in arca.live, and pixiv.
-Intended for Korean users - English locale is currently not planned.
+Please look at @match at the header of the code to find out which sites/subreddits/channels are supported.
 
 ## Version changes
 ### 1.12.2 2023-05-10 17:11
