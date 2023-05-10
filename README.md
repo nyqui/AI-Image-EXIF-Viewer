@@ -1,4 +1,6 @@
 # AI-Image-EXIF-Viewer
+https://github.com/nyqui/AI-Image-EXIF-Viewer
+
 https://greasyfork.org/ko/scripts/464214
 
 이미지 파일을 클릭하면 해당 이미지의 메타데이터를 읽고, AI 이미지 생성에 관련된 정보가 있다면 이를 표시합니다.
