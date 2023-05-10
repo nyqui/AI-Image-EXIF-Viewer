@@ -6,7 +6,7 @@
 // @match       https://arca.live/b/hypernetworks*
 // @match       https://arca.live/b/aiartreal*
 // @match       https://arca.live/b/aireal*
-// @version     2.0.0-alpha.2
+// @version     2.0.0-alpha.3
 // @author      nyqui
 // @require     https://greasyfork.org/scripts/452821-upng-js/code/UPNGjs.js?version=1103227
 // @require     https://cdn.jsdelivr.net/npm/casestry-exif-library@2.0.3/dist/exif-library.min.js
@@ -263,7 +263,7 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
       const blob = await fileToBlob(file);
       const type = blob.type;
       if (isArcaEditor) {
-        return;
+        uploadImage(blob, GM_getValue("saveExifDefault"))
       } else {
         if (!isSupportedImageFormat(blob.type)) {
           notSupportedFormat();
@@ -979,7 +979,7 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
         })
       }
 
-      formData.append('upload', blob, Math.random().toString(36).substring(7) + '.jpg');
+      formData.append('upload', blob);
       formData.append('token', token || document.querySelector("#article_write_form > input[name=token]").value);
       formData.append('saveExif', saveEXIF);
       formData.append('saveFilename', false);
