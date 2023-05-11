@@ -17,7 +17,7 @@ AI Image EXIF Viewer for select channels in arca.live, and pixiv.
 Intended for Korean users - English locale is currently not planned.
 
 ## Version changes
-### 2.0.0 2023-xx-xx xx:xx
+### 2.0.0 2023-05-11 14:25
 
  1. 이제 이 확장기능이 동작하는 아카 채널(AI 그림/반실사/실사/학습)에서 EXIF를 기본으로 저장할지, 버릴지를 선택할 수 있습니다.
      - 스크립트 관리자 (Tampermonkey 등) - "AI 이미지 EXIF 뷰어" 아래에 있습니다.
