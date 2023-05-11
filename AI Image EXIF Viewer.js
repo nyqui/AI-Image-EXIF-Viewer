@@ -6,7 +6,7 @@
 // @match       https://arca.live/b/hypernetworks*
 // @match       https://arca.live/b/aiartreal*
 // @match       https://arca.live/b/aireal*
-// @version     2.0.0-beta.1
+// @version     2.0.0-beta.2
 // @author      nyqui
 // @require     https://greasyfork.org/scripts/452821-upng-js/code/UPNGjs.js?version=1103227
 // @require     https://cdn.jsdelivr.net/npm/casestry-exif-library@2.0.3/dist/exif-library.min.js
@@ -266,7 +266,7 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
         const uploadableType = handleUploadable(type)
         let editor = document.querySelector('.write-body .fr-element')
         if (uploadableType == "image") {
-          uploadArca(blob, uploadableType, GM_getValue("saveExifDefault"))
+          uploadArca(blob, uploadableType, document.getElementById("saveExif").checked)
             .then(url => {
               editor.innerHTML = editor.innerHTML + `<img src="${url}" class="fr-fic fr-dii">`
               Swal.close();
