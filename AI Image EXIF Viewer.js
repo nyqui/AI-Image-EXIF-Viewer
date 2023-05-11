@@ -272,13 +272,13 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
           } catch { };
           uploadArca(blob, uploadableType, saveEXIF)
             .then(url => {
-              editor.innerHTML = editor.innerHTML + `<img src="${url}" class="fr-fic fr-dii"><br>`
+              editor.innerHTML = editor.innerHTML + `<p><img src="${url}" class="fr-fic fr-dii"></p><p><br></p>`
               Swal.close();
             })
         } else if (uploadableType == "video") {
           uploadArca(blob, uploadableType, false)
             .then(url => {
-              editor.innerHTML = editor.innerHTML + `<span class="fr-video fr-dvi fr-draggable"><video class="fr-draggable" controls="" loop="" muted="" playsinline="" src="${url}">귀하의 브라우저는 html5 video를 지원하지 않습니다.</video></span><br>`
+              editor.innerHTML = editor.innerHTML + `<p><span class="fr-video fr-dvi fr-draggable"><video class="fr-draggable" controls="" loop="" muted="" playsinline="" src="${url}">귀하의 브라우저는 html5 video를 지원하지 않습니다.</video></span></p><p><br></p>`
               Swal.close();
           })
         } else {
