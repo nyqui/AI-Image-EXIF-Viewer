@@ -6,7 +6,7 @@
 // @match       https://arca.live/b/hypernetworks*
 // @match       https://arca.live/b/aiartreal*
 // @match       https://arca.live/b/aireal*
-// @version     1.12.2
+// @version     2.0.0
 // @author      nyqui
 // @require     https://greasyfork.org/scripts/452821-upng-js/code/UPNGjs.js?version=1103227
 // @require     https://cdn.jsdelivr.net/npm/casestry-exif-library@2.0.3/dist/exif-library.min.js
@@ -173,6 +173,14 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
   }
   `;
 
+  const toastmix = Swal.mixin({
+    toast: true,
+    position: "bottom",
+    showConfirmButton: false,
+    timer: `${toastTimer}`,
+    timerProgressBar: true,
+  });
+
   function registerMenu() {
     try {
       if (typeof GM_registerMenuCommand == undefined) {
@@ -181,33 +189,40 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
         GM_registerMenuCommand("(로그인 필수) Pixiv 뷰어 사용 토글", () => {
           if (GM_getValue("usePixiv", false)) {
             GM_setValue("usePixiv", false);
-            Swal.fire({
-              toast: true,
-              position: "bottom",
-              showConfirmButton: false,
-              timer: `${toastTimer}`,
+            toastmix.fire({
               icon: "error",
               title: `Pixiv 비활성화
                       창이 닫힌 후 새로고침 됩니다`,
-              timerProgressBar: true,
               didDestroy: () => {
                 location.reload();
               },
             });
           } else {
             GM_setValue("usePixiv", true);
-            Swal.fire({
-              toast: true,
-              position: "bottom",
-              showConfirmButton: false,
-              timer: `${toastTimer}`,
+            toastmix.fire({
               icon: "success",
               title: `Pixiv 활성화
                       창이 닫힌 후 새로고침 됩니다`,
-              timerProgressBar: true,
               didDestroy: () => {
                 location.reload();
               },
+            });
+          }
+        });
+        GM_registerMenuCommand("아카라이브 EXIF 보존 토글", () => {
+          if (GM_getValue("saveExifDefault", true)) {
+            GM_setValue("saveExifDefault", false);
+            toastmix.fire({
+              icon: "error",
+              title: `아카라이브 EXIF 보존 비활성화
+                      다음번 작성시부터 버려집니다`,
+            });
+          } else {
+            GM_setValue("saveExifDefault", true);
+            toastmix.fire({
+              icon: "success",
+              title: `아카라이브 EXIF 보존 활성화
+                      다음번 작성시부터 보존됩니다`,
             });
           }
         });
@@ -247,12 +262,37 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
 
       const blob = await fileToBlob(file);
       const type = blob.type;
-      if (!isSupportedImageFormat(blob.type)) {
-        notSupportedFormat();
-        return;
+      if (isArcaEditor) {
+        const uploadableType = handleUploadable(type)
+        let editor = document.querySelector('.write-body .fr-element')
+        if (uploadableType == "image") {
+          uploadArca(blob, uploadableType, document.getElementById("saveExif").checked)
+            .then(url => {
+              editor.innerHTML = editor.innerHTML + `<img src="${url}" class="fr-fic fr-dii">`
+              Swal.close();
+            })
+        } else if (uploadableType == "video") {
+          uploadArca(blob, uploadableType, false)
+            .then(url => {
+              editor.innerHTML = editor.innerHTML + `<span class="fr-video fr-dvi fr-draggable"><video class="fr-draggable" controls="" loop="" muted="" playsinline="" src="${url}">귀하의 브라우저는 html5 video를 지원하지 않습니다.</video></span>`
+              Swal.close();
+          })
+        } else {
+          Swal.close();
+          toastmix.fire({
+            icon: "error",
+            title: `업로드 오류:
+                    업로드 할 수 있는 포맷이 아닙니다.`,
+          });
+        }
+      } else {
+        if (!isSupportedImageFormat(blob.type)) {
+          notSupportedFormat();
+          return;
+        }
+        const metadata = await extractImageMetadata(blob, type);
+        metadata ? showMetadataModal(metadata) : showTagExtractionModal(null, blob);
       }
-      const metadata = await extractImageMetadata(blob, type);
-      metadata ? showMetadataModal(metadata) : showTagExtractionModal(null, blob);
     }
 
     setupEventListeners() {
@@ -775,12 +815,8 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
   }
 
   function notSupportedFormat() {
-    Swal.fire({
-      toast: true,
+    toastmix.fire({
       position: "top-end",
-      showConfirmButton: false,
-      timer: `${toastTimer}`,
-      timerProgressBar: true,
       icon: "error",
       title: "지원하지 않는 파일 형식입니다.",
     });
@@ -789,6 +825,18 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
   function isSupportedImageFormat(url) {
     const supportedExtensions = /\.(png|jpe?g|webp)|image\/(jpeg|webp|png)/;
     return supportedExtensions.test(url);
+  }
+
+  function handleUploadable(MIME) {
+    const uploadableSubtypes = /(jpe?g|jfif|pjp|png|gif|web[pm]|mov|mp4|m4[ab])/;
+    const [type, subtype] = MIME.split('/');
+    console.log(type);
+    console.log(subtype);
+    if (uploadableSubtypes.test(subtype)) {
+      return type;
+    } else {
+      return null;
+    }
   }
 
   async function extractImageMetadata(blob, type) {
@@ -944,6 +992,63 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
     console.timeEnd("modal open");
   }
 
+  function getCSRFToken() {
+    return new Promise(resolve => {
+      const csrf = document.querySelector("input[name=_csrf]")
+      const token = document.querySelector("input[name=token]")
+      if (csrf && token) {
+        resolve([csrf.value, token.value])
+      }
+    })
+  }
+
+  function uploadArca(blob, type, saveEXIF = true, token = null) {
+    return new Promise(async (resolve, reject) => {
+      let swalText = "비디오는 EXIF 보존 설정에 영향을 받지 않습니다.";
+      if (type == "image") {
+        swalText = "EXIF 보존: " + saveEXIF;
+      }
+      let xhr = new XMLHttpRequest();
+      xhr.upload.addEventListener("progress", null, false);
+      let formData = new FormData();
+      if (!document.querySelector("#article_write_form > input[name=token]")) {
+        await getCSRFToken().then(tokenList => {
+            token = tokenList[1]
+        })
+      }
+
+      formData.append('upload', blob);
+      formData.append('token', token || document.querySelector("#article_write_form > input[name=token]").value);
+      formData.append('saveExif', saveEXIF);
+      formData.append('saveFilename', false);
+
+      xhr.onload = function() {
+        let response = JSON.parse(xhr.responseText)
+        if (response.uploaded === true) {
+          resolve(response.url)
+        } else {
+          Swal.close();
+          console.error(xhr.responseText);
+          toastmix.fire({
+            icon: "error",
+            title: `업로드 오류`,
+          });
+        }
+      }
+      xhr.open("POST", "https://arca.live/b/upload");
+      xhr.send(formData);
+      Swal.fire({
+        title: '파일 업로드중',
+        text: swalText,
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading()
+        },
+      });
+    });
+  }
+
   const {
     hostname,
     href,
@@ -1021,7 +1126,7 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
     });
   }
 
-  if (isArcaEditor) {
+  if (GM_getValue("saveExifDefault", true) && isArcaEditor) {
     document.arrive(".images-multi-upload", {
       onceOnly: true
     }, () => {
@@ -1029,7 +1134,7 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
     });
   }
 
-  !isMobile && !isPixivDragUpload && !isArcaEditor && new DropZone();
+  !isMobile && !isPixivDragUpload && new DropZone();
   GM_addStyle(modalCSS);
   new ClipboardJS(".md-copy");
   registerMenu();
