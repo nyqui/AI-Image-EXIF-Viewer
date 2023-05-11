@@ -6,7 +6,7 @@
 // @match       https://arca.live/b/hypernetworks*
 // @match       https://arca.live/b/aiartreal*
 // @match       https://arca.live/b/aireal*
-// @version     2.0.0
+// @version     2.0.1
 // @author      nyqui
 // @require     https://greasyfork.org/scripts/452821-upng-js/code/UPNGjs.js?version=1103227
 // @require     https://cdn.jsdelivr.net/npm/casestry-exif-library@2.0.3/dist/exif-library.min.js
@@ -265,16 +265,20 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
       if (isArcaEditor) {
         const uploadableType = handleUploadable(type)
         let editor = document.querySelector('.write-body .fr-element')
+        let saveEXIF = GM_getValue("saveExifDefault", true)
         if (uploadableType == "image") {
-          uploadArca(blob, uploadableType, document.getElementById("saveExif").checked)
+          try {
+            saveEXIF = document.getElementById("saveExif").checked
+          } catch { };
+          uploadArca(blob, uploadableType, saveEXIF)
             .then(url => {
-              editor.innerHTML = editor.innerHTML + `<img src="${url}" class="fr-fic fr-dii">`
+              editor.innerHTML = editor.innerHTML + `<p><img src="${url}" class="fr-fic fr-dii"></p><p><br></p>`
               Swal.close();
             })
         } else if (uploadableType == "video") {
           uploadArca(blob, uploadableType, false)
             .then(url => {
-              editor.innerHTML = editor.innerHTML + `<span class="fr-video fr-dvi fr-draggable"><video class="fr-draggable" controls="" loop="" muted="" playsinline="" src="${url}">귀하의 브라우저는 html5 video를 지원하지 않습니다.</video></span>`
+              editor.innerHTML = editor.innerHTML + `<p><span class="fr-video fr-dvi fr-draggable"><video class="fr-draggable" controls="" loop="" muted="" playsinline="" src="${url}">귀하의 브라우저는 html5 video를 지원하지 않습니다.</video></span></p><p><br></p>`
               Swal.close();
           })
         } else {
@@ -830,8 +834,6 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
   function handleUploadable(MIME) {
     const uploadableSubtypes = /(jpe?g|jfif|pjp|png|gif|web[pm]|mov|mp4|m4[ab])/;
     const [type, subtype] = MIME.split('/');
-    console.log(type);
-    console.log(subtype);
     if (uploadableSubtypes.test(subtype)) {
       return type;
     } else {
