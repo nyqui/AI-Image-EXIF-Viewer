@@ -296,7 +296,6 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
           return;
         }
         const metadata = await extractImageMetadata(blob, type);
-        console.log(metadata);
         metadata ? showMetadataModal(metadata) : showTagExtractionModal(null, blob);
       }
     }
