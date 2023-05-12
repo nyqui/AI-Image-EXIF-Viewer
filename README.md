@@ -16,7 +16,19 @@ https://greasyfork.org/ko/scripts/464214
 AI Image EXIF Viewer for select channels in arca.live, and pixiv.
 Intended for Korean users - English locale is currently not planned.
 
+---
+
+**⚠️⚠️⚠️EXIF 데이터 보존시 주의⚠️⚠️⚠️**
+
+**폰카로 찍은 사진을 EXIF 보존한 채로 업로드할 시 촬영일시, 촬영장소(GPS 좌표) 등이 노출될 수 있습니다. AI 생성 이미지가 아닌 이미지를 다룰 때 각별한 주의가 필요합니다.**
+
+---
+
 ## Version changes
+### 2.0.2 2023-05-12 09:08
+
+ 1. @match https://arca.live/b/characterai* 추가
+
 ### 2.0.1 2023-05-11 15:33
 
  1. 아카에서 새 글 작성시, 
