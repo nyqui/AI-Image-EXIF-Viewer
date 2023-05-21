@@ -7,7 +7,7 @@
 // @match       https://arca.live/b/aiartreal*
 // @match       https://arca.live/b/aireal*
 // @match       https://arca.live/b/characterai*
-// @version     2.0.2
+// @version     2.0.3
 // @author      nyqui
 // @require     https://greasyfork.org/scripts/452821-upng-js/code/UPNGjs.js?version=1103227
 // @require     https://cdn.jsdelivr.net/npm/casestry-exif-library@2.0.3/dist/exif-library.min.js
@@ -510,7 +510,7 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
       metadata?.negativePrompt?.includes("hypernet:")) &&
     inferList.push("Hypernet");
 
-    const controlNetRegex = /ControlNet-?\d? Enabled/;
+    const controlNetRegex = /(ControlNet-?\d? Enabled)|(ControlNet \d?)/;
     for (const key in metadata) {
       if (controlNetRegex.test(key)) {
         inferList.push("ControlNet");
