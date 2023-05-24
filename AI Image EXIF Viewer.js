@@ -510,7 +510,7 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
       metadata?.negativePrompt?.includes("hypernet:")) &&
     inferList.push("Hypernet");
 
-    const controlNetRegex = /(ControlNet-?\d? Enabled)|(ControlNet \d?)/;
+    const controlNetRegex = /(ControlNet-?\d? Enabled)|(ControlNet \d?)|(ControlNet)/;
     for (const key in metadata) {
       if (controlNetRegex.test(key)) {
         inferList.push("ControlNet");
