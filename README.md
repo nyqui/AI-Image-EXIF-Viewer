@@ -25,6 +25,10 @@ Intended for Korean users - English locale is currently not planned.
 ---
 
 ## Version changes
+### 2.0.4 2023-05-24 16:09
+
+ 1. Infer에서의 ControlNet 인식 개선(2)
+
 ### 2.0.3 2023-05-22 00:49
 
  1. Infer에서의 ControlNet 인식 개선
