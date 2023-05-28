@@ -7,7 +7,7 @@
 // @match       https://arca.live/b/aiartreal*
 // @match       https://arca.live/b/aireal*
 // @match       https://arca.live/b/characterai*
-// @version     2.0.4
+// @version     2.1.0.alpha-1
 // @author      nyqui
 // @require     https://greasyfork.org/scripts/452821-upng-js/code/UPNGjs.js?version=1103227
 // @require     https://cdn.jsdelivr.net/npm/casestry-exif-library@2.0.3/dist/exif-library.min.js
@@ -224,6 +224,23 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
               icon: "success",
               title: `아카라이브 EXIF 보존 활성화
                       다음번 작성시부터 보존됩니다`,
+            });
+          }
+        });
+        GM_registerMenuCommand("아카라이브 글쓰기 창 스크립트 토글", () => {
+          if (GM_getValue("useDragdropUpload", true)) {
+            GM_setValue("useDragdropUpload", false);
+            toastmix.fire({
+              icon: "error",
+              title: `아카 글쓰기 창 스크립트 비활성화
+                      다음번 작성시부터 적용됩니다`,
+            });
+          } else {
+            GM_setValue("useDragdropUpload", true);
+            toastmix.fire({
+              icon: "success",
+              title: `아카 글쓰기 창 스크립트 활성화
+                      다음번 작성시부터 적용됩니다`,
             });
           }
         });
@@ -1129,15 +1146,19 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
     });
   }
 
-  if (GM_getValue("saveExifDefault", true) && isArcaEditor) {
-    document.arrive(".images-multi-upload", {
-      onceOnly: true
-    }, () => {
-      document.getElementById("saveExif").checked = true;
-    });
+  let ArcaDragUpload = true;
+  if (isArcaEditor) {
+    if (GM_getValue("saveExifDefault", true)) {
+      document.arrive(".images-multi-upload", {
+        onceOnly: true
+      }, () => {
+        document.getElementById("saveExif").checked = true;
+      });
+    }
+    if (!GM_getValue("useDragdropUpload", true)) ArcaDragUpload = false;
   }
 
-  !isMobile && !isPixivDragUpload && new DropZone();
+  !isMobile && !isPixivDragUpload && ArcaDragUpload && new DropZone();
   GM_addStyle(modalCSS);
   new ClipboardJS(".md-copy");
   registerMenu();
