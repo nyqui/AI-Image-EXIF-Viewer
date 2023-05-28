@@ -13,6 +13,8 @@ https://greasyfork.org/ko/scripts/464214
 
 (이때도 관련 메타데이터가 없을 시 프롬프트 매칭을 시도할 수 있습니다.)
 
+[보다 자세한 사항은 위키를 참고해주시기 바랍니다.](https://github.com/nyqui/AI-Image-EXIF-Viewer/wiki)
+
 AI Image EXIF Viewer for select channels in arca.live, and pixiv.
 Intended for Korean users - English locale is currently not planned.
 
