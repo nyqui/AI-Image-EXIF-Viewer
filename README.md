@@ -25,6 +25,12 @@ Intended for Korean users - English locale is currently not planned.
 ---
 
 ## Version changes
+### 2.1.0 2023-05-28 19:28
+
+ 1. 아카라이브 글쓰기 창에서 스크립트의 드래그+드롭 업로드 기능을 켜고 끌 수 있습니다. (기본값: 켜짐)
+     - EXIF 보존/해제 옵션처럼 스크립트 관리자 메뉴에서 토글로 켜고 끌 수 있습니다.
+     - 상기한 EXIF 보존/해제 옵션의 적용 유무에는 영향을 주지 않습니다.
+
 ### 2.0.4 2023-05-24 16:09
 
  1. Infer에서의 ControlNet 인식 개선(2)
