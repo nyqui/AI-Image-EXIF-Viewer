@@ -27,6 +27,10 @@ Intended for Korean users - English locale is currently not planned.
 ---
 
 ## Version changes
+### 2.1.1 2023-06-14 20:46
+
+ 1. 웹페이지 상에서 일부 JPEG 포맷의 이미지를 클릭했을 시 메타데이터가 인식되지 않는 문제를 해결했습니다.
+
 ### 2.1.0 2023-05-28 19:28
 
  1. 아카라이브 글쓰기 창에서 스크립트의 드래그+드롭 업로드 기능을 켜고 끌 수 있습니다. (기본값: 켜짐)
