@@ -7,7 +7,7 @@
 // @match       https://arca.live/b/aiartreal*
 // @match       https://arca.live/b/aireal*
 // @match       https://arca.live/b/characterai*
-// @version     2.1.0
+// @version     2.1.1-alpha.2
 // @author      nyqui
 // @require     https://greasyfork.org/scripts/452821-upng-js/code/UPNGjs.js?version=1103227
 // @require     https://cdn.jsdelivr.net/npm/casestry-exif-library@2.0.3/dist/exif-library.min.js
@@ -287,7 +287,7 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
         if (uploadableType == "image") {
           try {
             saveEXIF = document.getElementById("saveExif").checked
-          } catch { };
+          } catch {};
           uploadArca(blob, uploadableType, saveEXIF)
             .then(url => {
               editor.innerHTML = editor.innerHTML + `<p><img src="${url}" class="fr-fic fr-dii"></p><p><br></p>`
@@ -298,7 +298,7 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
             .then(url => {
               editor.innerHTML = editor.innerHTML + `<p><span class="fr-video fr-dvi fr-draggable"><video class="fr-draggable" controls="" loop="" muted="" playsinline="" src="${url}">귀하의 브라우저는 html5 video를 지원하지 않습니다.</video></span></p><p><br></p>`
               Swal.close();
-          })
+            })
         } else {
           Swal.close();
           toastmix.fire({
@@ -377,33 +377,38 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
   }
 
   function getMetadataJPEGChunk(chunk) {
-    if (chunk[0] !== 255 || chunk[1] !== 216) {
+    if (chunk[0] !== 255 || chunk[1] !== 216) { // 0xFF 0xD8
       console.error("Invalid JPEG");
       return null;
     }
     const textDecoder = new TextDecoder();
     let offset = 2;
-    if (chunk[offset] === 0xff && chunk[offset + 1] === 0xe1) {
-      const length = (chunk[offset + 2] << 8) | chunk[offset + 3];
-      const data = chunk.subarray(offset + 4, offset + 2 + length);
-      if (
-        data[0] === 69 &&
-        data[1] === 120 &&
-        data[2] === 105 &&
-        data[3] === 102 &&
-        data[4] === 0 &&
-        data[5] === 0
-      ) {
-        const userCommentData = data.subarray(46, offset + 2 + length);
-        const parameters = textDecoder
-          .decode(userCommentData)
-          .replace("UNICODE", "")
-          .replaceAll("\u0000", "");
-        return {
-          parameters
-        };
-      } else {
-        return null;
+    if (chunk[offset] === 0xff) {
+      switch (chunk[offset + 1]) {
+        case 0xe0: {
+          offset += (chunk[offset + 2] << 8) | chunk[offset + 3];
+        }
+        case 0xe1: {
+          const length = (chunk[offset + 2] << 8) | chunk[offset + 3];
+          const data = chunk.subarray(offset + 4, offset + 2 + length);
+          if (
+            data[0] === 69 && //0x45 E
+            data[1] === 120 && //0x78 x
+            data[2] === 105 && //0x69 i
+            data[3] === 102 && //0x66 f
+            data[4] === 0 && // null
+            data[5] === 0 // null
+          ) {
+            const userCommentData = data.subarray(46, offset + 2 + length);
+            const parameters = textDecoder
+              .decode(userCommentData)
+              .replace("UNICODE", "")
+              .replaceAll("\u0000", "");
+            return parameters
+          }
+        }
+        default:
+          return null;
       }
     }
     return null;
@@ -947,6 +952,7 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
         } = await reader.read();
         if (done || metadata || metadata === null) {
           reader.cancel();
+          console.log("b"); //debug
           break;
         }
         switch (contentType) {
@@ -1033,7 +1039,7 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
       let formData = new FormData();
       if (!document.querySelector("#article_write_form > input[name=token]")) {
         await getCSRFToken().then(tokenList => {
-            token = tokenList[1]
+          token = tokenList[1]
         })
       }
 
