@@ -7,7 +7,7 @@
 // @match       https://arca.live/b/aiartreal*
 // @match       https://arca.live/b/aireal*
 // @match       https://arca.live/b/characterai*
-// @version     2.1.1-alpha.4
+// @version     2.1.1
 // @author      nyqui
 // @require     https://greasyfork.org/scripts/452821-upng-js/code/UPNGjs.js?version=1103227
 // @require     https://cdn.jsdelivr.net/npm/casestry-exif-library@2.0.3/dist/exif-library.min.js
@@ -386,11 +386,9 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
     if (chunk[offset] === 0xff) {
       switch (chunk[offset + 1]) {
         case 0xe0: {
-          console.log("e0"); //debug
           offset += ((chunk[offset + 2] << 8) | chunk[offset + 3]) + 2;
         }
         case 0xe1: {
-          console.log("e1"); //debug
           const length = (chunk[offset + 2] << 8) | chunk[offset + 3];
           const data = chunk.subarray(offset + 4, offset + 2 + length);
           if (
