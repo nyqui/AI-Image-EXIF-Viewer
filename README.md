@@ -1,3 +1,6 @@
+## ⚠️⚠️⚠️ 이곳은 개발중인 장소입니다. ⚠️⚠️⚠️
+ 코드가 안정화되지 않았을 수 있으며, main에 merge 및 Greasy Fork로 release되기 전 언제던 변경될 수 있습니다.
+
 # AI-Image-EXIF-Viewer
 https://github.com/nyqui/AI-Image-EXIF-Viewer
 
