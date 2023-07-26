@@ -7,24 +7,44 @@
 // @match       https://arca.live/b/aiartreal*
 // @match       https://arca.live/b/aireal*
 // @match       https://arca.live/b/characterai*
-// @version     2.1.1
+// @version     2.1.2.alpha-4
 // @author      nyqui
 // @require     https://greasyfork.org/scripts/452821-upng-js/code/UPNGjs.js?version=1103227
 // @require     https://cdn.jsdelivr.net/npm/casestry-exif-library@2.0.3/dist/exif-library.min.js
 // @require     https://cdn.jsdelivr.net/npm/sweetalert2@11
 // @require     https://cdn.jsdelivr.net/npm/clipboard@2.0.10/dist/clipboard.min.js
 // @require     https://cdnjs.cloudflare.com/ajax/libs/arrive/2.4.1/arrive.min.js
-// @require     https://greasyfork.org/scripts/421384-gm-fetch/code/GM_fetch.js
-// @grant       GM_xmlhttpRequest
-// @grant       GM_registerMenuCommand
-// @grant       GM_setValue
-// @grant       GM_getValue
-// @grant       GM_addStyle
-// @grant       GM_download
+// @require     https://greasyfork.org/scripts/35383-gm-addstyle-polyfill/code/GMaddStyle%20Polyfill.js?version=231590
+// @grant       GM.registerMenuCommand
+// @grant       GM.setValue
+// @grant       GM.getValue
+// @grant       GM.download
+// @grant       GM.xmlHttpRequest
 
 // @description AI 이미지 메타데이터 보기
 // @license MIT
 // ==/UserScript==
+
+function GM_fetch(url, opt={}){
+	return new Promise((resolve, reject)=>{
+		// https://www.tampermonkey.net/documentation.php?ext=dhdg#GM_xmlhttpRequest
+		// https://violentmonkey.github.io/api/gm/#gm_xmlhttprequest
+		opt.url = url
+		opt.data = opt.body
+		opt.responseType = "blob"
+		opt.onload = resp=>{
+			resolve(new Response(resp.response, {status: resp.status,
+				// https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/getAllResponseHeaders#examples
+				headers: Object.fromEntries(resp.responseHeaders.trim().split(/[\r\n]+/).map(line=>{parts=line.split(': ');return [parts.shift(), parts.join(': ')]}))
+			}))
+		}
+		opt.ontimeout = ()=>reject("fetch timeout")
+		opt.onerror   = error=>reject(error)
+		opt.onabort   = ()=>reject("fetch abort")
+		GM.xmlHttpRequest(opt)
+	})
+};
+
 
 //this URL must be changed manually to be linked properly
 const scriptGreasyforkURL = "https://greasyfork.org/scripts/464214";
@@ -35,9 +55,9 @@ const colorOption2 = "#ff9d0b";
 const colorClose = "#b41b29";
 
 
-const footerString = "<div class=\"version\">v" + GM_info.script.version +
+const footerString = "<div class=\"version\">v" + GM.info.script.version +
   "  -  <a href=\"" + scriptGreasyforkURL + "\" target=\"_blank\">Greasy Fork</a>  -  <a href=\"" +
-  GM_info.script.namespace + "\" target=\"_blank\">GitHub</a></div>";
+  GM.info.script.namespace + "\" target=\"_blank\">GitHub</a></div>";
 
 (async function() {
   "use strict";
@@ -184,12 +204,12 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
 
   function registerMenu() {
     try {
-      if (typeof GM_registerMenuCommand == undefined) {
+      if (typeof GM.registerMenuCommand == undefined) {
         return;
       } else {
-        GM_registerMenuCommand("(로그인 필수) Pixiv 뷰어 사용 토글", () => {
-          if (GM_getValue("usePixiv", false)) {
-            GM_setValue("usePixiv", false);
+        GM.registerMenuCommand("(로그인 필수) Pixiv 뷰어 사용 토글", () => {
+          if (GM.getValue("usePixiv", false)) {
+            GM.setValue("usePixiv", false);
             toastmix.fire({
               icon: "error",
               title: `Pixiv 비활성화
@@ -199,7 +219,7 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
               },
             });
           } else {
-            GM_setValue("usePixiv", true);
+            GM.setValue("usePixiv", true);
             toastmix.fire({
               icon: "success",
               title: `Pixiv 활성화
@@ -210,16 +230,16 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
             });
           }
         });
-        GM_registerMenuCommand("아카라이브 EXIF 보존 토글", () => {
-          if (GM_getValue("saveExifDefault", true)) {
-            GM_setValue("saveExifDefault", false);
+        GM.registerMenuCommand("아카라이브 EXIF 보존 토글", () => {
+          if (GM.getValue("saveExifDefault", true)) {
+            GM.setValue("saveExifDefault", false);
             toastmix.fire({
               icon: "error",
               title: `아카라이브 EXIF 보존 비활성화
                       다음번 작성시부터 버려집니다`,
             });
           } else {
-            GM_setValue("saveExifDefault", true);
+            GM.setValue("saveExifDefault", true);
             toastmix.fire({
               icon: "success",
               title: `아카라이브 EXIF 보존 활성화
@@ -227,16 +247,16 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
             });
           }
         });
-        GM_registerMenuCommand("아카라이브 글쓰기 창 스크립트 토글", () => {
-          if (GM_getValue("useDragdropUpload", true)) {
-            GM_setValue("useDragdropUpload", false);
+        GM.registerMenuCommand("아카라이브 글쓰기 창 스크립트 토글", () => {
+          if (GM.getValue("useDragdropUpload", true)) {
+            GM.setValue("useDragdropUpload", false);
             toastmix.fire({
               icon: "error",
               title: `아카 글쓰기 창 스크립트 비활성화
                       다음번 작성시부터 적용됩니다`,
             });
           } else {
-            GM_setValue("useDragdropUpload", true);
+            GM.setValue("useDragdropUpload", true);
             toastmix.fire({
               icon: "success",
               title: `아카 글쓰기 창 스크립트 활성화
@@ -283,7 +303,7 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
       if (isArcaEditor) {
         const uploadableType = handleUploadable(type)
         let editor = document.querySelector('.write-body .fr-element')
-        let saveEXIF = GM_getValue("saveExifDefault", true)
+        let saveEXIF = GM.getValue("saveExifDefault", true)
         if (uploadableType == "image") {
           try {
             saveEXIF = document.getElementById("saveExif").checked
@@ -682,7 +702,7 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
         if (result.isConfirmed) {
           window.open(url, '_blank');
         } else if (result.isDenied) {
-          GM_download(url, getFileName(url));
+          GM.download(url, getFileName(url));
         }
       });
     } else { // if image has no URL, then it must have been dragged and dropped, hence no open in new tab or download options
@@ -908,7 +928,7 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
         reader = response.body.getReader();
       } else if (useTampermonkey) {
         response = await new Promise((resolve) => {
-          GM_xmlhttpRequest({
+          GM.xmlHttpRequest({
             url,
             responseType: "stream",
             headers: {
@@ -1086,10 +1106,10 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
   const isArca = hostname === "arca.live";
   const isArcaViewer = /(arca.live)(\/)(b\/.*)(\/)(\d*)/.test(href);
   const isArcaEditor = /(arca.live\/b\/.*\/)(edit|write)/.test(href);
-  const useTampermonkey = GM_xmlhttpRequest?.RESPONSE_TYPE_STREAM && true;
+  const useTampermonkey = GM.xmlHttpRequest?.RESPONSE_TYPE_STREAM && true;
   const isPixivDragUpload = pathname === "/illustration/create" || pathname === "/upload.php";
 
-  if (GM_getValue("usePixiv", false) && isPixiv) {
+  if (GM.getValue("usePixiv", false) && isPixiv) {
     function getOriginalUrl(url) {
       const extension = url.substring(url.lastIndexOf(".") + 1);
       const originalUrl = url
@@ -1155,18 +1175,18 @@ const footerString = "<div class=\"version\">v" + GM_info.script.version +
 
   let ArcaDragUpload = true;
   if (isArcaEditor) {
-    if (GM_getValue("saveExifDefault", true)) {
+    if (GM.getValue("saveExifDefault", true)) {
       document.arrive(".images-multi-upload", {
         onceOnly: true
       }, () => {
         document.getElementById("saveExif").checked = true;
       });
     }
-    if (!GM_getValue("useDragdropUpload", true)) ArcaDragUpload = false;
+    if (!GM.getValue("useDragdropUpload", true)) ArcaDragUpload = false;
   }
 
   !isMobile && !isPixivDragUpload && ArcaDragUpload && new DropZone();
-  GM_addStyle(modalCSS);
+  GM.addStyle(modalCSS);
   new ClipboardJS(".md-copy");
   registerMenu();
 })();
